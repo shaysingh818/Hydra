@@ -24,6 +24,14 @@ impl Board {
 		&self.matrix
 	}
 
+	pub fn get_cols(&self) -> usize {
+		self.cols
+	}
+
+	pub fn get_rows(&self) -> usize {
+		self.rows
+	}
+
 	pub fn resize_board(&mut self, set_row: usize, set_col: usize){
 		self.matrix = vec![vec![0; set_row]; set_col] 
 	}
