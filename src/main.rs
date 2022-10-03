@@ -38,8 +38,6 @@ pub fn match_command_arg(game_type: &str, rounds: &String) {
 
 
 fn main() {
-    println!("Hello, world!");
-	//tictactoe::game_cycle(10); 
 
 	let args: Vec<String> = env::args().collect(); 
 	println!("{:?}", args); 

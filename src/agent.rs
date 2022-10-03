@@ -32,6 +32,9 @@ impl Agent {
 		self.history
 	}
 
+	pub fn set_score(&mut self, num: i32) {
+		self.score = num; 
+	}
 
 	pub fn set_status(&mut self, status: bool) {
 		self.active = status; 

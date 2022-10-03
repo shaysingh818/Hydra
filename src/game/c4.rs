@@ -5,39 +5,78 @@ use rand::Rng;
 
 
 pub fn check_diagonals(my_board: &Board, piece: i32) -> bool {
-    let mut left_diag = true;
-    let mut right_diag = true;
-    let mut count = 0;
-    let mut board_size = my_board.get_board().len();
 
-    loop {
+    let mut left_right = true;
+    let mut right_left = true;
+    let board_matrix = my_board.get_board();
+    let board_size = my_board.get_board().len();
+    let mut row_count = (my_board.get_rows() - 1) as i32;
+    let mut col_counter = 0;
 
-        if count == 4 {
-            break;
+    for _col in 0..4 {
+
+        if board_matrix[col_counter][row_count as usize] != piece {
+            left_right = false;
         }
 
-        if my_board.get_pos(count, board_size) != piece {
-            right_diag = false;
+        if board_matrix[col_counter][col_counter] != piece {
+            right_left = false;
         }
 
-        if my_board.get_pos(count, count) != piece {
-            left_diag = false;
-        }
-
-        board_size -= 1;
-        count += 1;
+        col_counter += 1;
+        row_count -= 1;
 
     }
 
-    if left_diag == true || right_diag == true {
+    // check final result
+    if left_right == true || right_left == true {
+        return true
+    }
+
+    false
+}
+
+
+pub fn check_vert_horiz(my_board: &Board, piece: i32) -> bool {
+
+    // vars
+    let mut horiz = true;
+    let mut vert = true;
+    let mut row_index = 0;
+    let mut col_index = 0;
+    let board_matrix = my_board.get_board();
+
+    // loop throuh board
+    for row in board_matrix {
+        let mut temp_horiz = true;
+        let mut temp_vert = true;
+        for col in row {
+            if *col != piece {
+                temp_horiz = false;
+            }
+            if board_matrix[col_index][row_index] != piece {
+                temp_vert = false;
+            }
+            col_index += 1;
+        }
+
+        if temp_horiz == true || temp_vert == true {
+            break;
+        } else {
+            horiz = false;
+            vert = false;
+        }
+
+        row_index += 1;
+        col_index = 0;
+    }
+
+    if horiz == true || vert == true {
         return true
     }
 
     return false
-
 }
-
-
 
 
 pub fn get_available_positions(my_board: &mut Board) -> Vec<(usize, usize)> {
@@ -143,7 +182,48 @@ pub fn connect_game_cycle(rounds: i32){
         thread::sleep(second);
 
 	}
+}
+
+
+#[cfg(test)]
+mod c4_tests {
+
+	use crate::Board; 
+	use crate::c4::*; 
+
+	#[test]
+    fn test_left_right_diagonal() {
+
+        let mut board : Board = Board::new(7, 6);
+        board.place_piece(0, 0, 1);
+        board.place_piece(1, 1, 1);
+        board.place_piece(2, 2, 1);
+        board.place_piece(3, 3, 1);
+
+        let result = check_diagonals(&board, 1);
+
+        board.print_board();
+        assert_eq!(result, true);
+    }
+
+	#[test]
+    fn test_right_left_diagonal() {
+
+        let mut board : Board = Board::new(7, 6);
+        board.place_piece(0, 3, 1);
+        board.place_piece(1, 2, 1);
+        board.place_piece(2, 1, 1);	
+        board.place_piece(3, 0, 1);
+
+        let result = check_diagonals(&board, 1);
+
+        board.print_board();
+        assert_eq!(result, true);
+    }
+
 
 
 
 }
+
+
