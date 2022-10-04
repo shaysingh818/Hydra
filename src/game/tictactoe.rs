@@ -1,7 +1,7 @@
 use crate::board::{Board};
 use crate::agent::Agent;
 use std::{thread, time}; 
-use rand::Rng; 
+use rand::*; 
 
 
 pub fn check_diagonals(my_board: &Board, piece: i32) -> bool {

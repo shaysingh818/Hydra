@@ -7,12 +7,9 @@ use rand::Rng;
 pub fn check_diagonals(my_board: &Board, piece: i32) -> bool {
 	
     let board_matrix = my_board.get_board();
-    let board_size = my_board.get_board().len();
 	
     let mut left_right = true;
     let mut right_left = true;
-    let mut row_count = (my_board.get_rows() - 1) as i32;
-    let mut col_counter = 0;
 	let mut start_left : i32 = 0; 
 	let mut start_right : i32 = 6;
 
@@ -100,14 +97,13 @@ pub fn check_vert_horiz(my_board: &Board, piece: i32) -> bool {
 
 pub fn get_available_positions(my_board: &mut Board) -> Vec<(usize, usize)> {
     let mut position_vec = Vec::new();
-    let board_matrix = my_board.get_board();
 
-	let mut rows = my_board.get_cols(); 
-    let mut cols = my_board.get_rows(); 
+	let rows = my_board.get_cols(); 
+    let cols = my_board.get_rows(); 
+	let col_counter = cols -1; 
 	println!("Board cols: {:?}", cols);
 	println!("Board rows: {:?}", rows); 
 
-	let mut col_counter = cols -1; 
 	//println!("Rows: {:?}", row_counter); 
 
 	for _col in 0..col_counter {	
@@ -144,6 +140,8 @@ pub fn take_random_action(my_board: &mut Board, agent: Agent) {
 pub fn connect_game_cycle(rounds: i32){
 
     // create board
+
+	println!("Playing {:?} rounds of c4", rounds); 
     let mut my_board : Board = Board::new(7, 6);	
 	
 
@@ -195,7 +193,6 @@ pub fn connect_game_cycle(rounds: i32){
  
 		// wait one second
         let second = time::Duration::from_millis(1000);
-        let now = time::Instant::now();
         thread::sleep(second);
 
 	}
