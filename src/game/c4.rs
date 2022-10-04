@@ -5,35 +5,54 @@ use rand::Rng;
 
 
 pub fn check_diagonals(my_board: &Board, piece: i32) -> bool {
-
-    let mut left_right = true;
-    let mut right_left = true;
+	
     let board_matrix = my_board.get_board();
     let board_size = my_board.get_board().len();
+	
+    let mut left_right = true;
+    let mut right_left = true;
     let mut row_count = (my_board.get_rows() - 1) as i32;
     let mut col_counter = 0;
+	let mut start_left : i32 = 0; 
+	let mut start_right : i32 = 6;
 
-    for _col in 0..4 {
+	while start_right >= 3 && start_left <= 3 {
 
-        if board_matrix[col_counter][row_count as usize] != piece {
-            left_right = false;
-        }
+		let mut temp_right = start_right; 
+		let mut temp_left = start_left;
+		left_right = true; 
+		right_left = true;  
 
-        if board_matrix[col_counter][col_counter] != piece {
-            right_left = false;
-        }
+		for _sub in 0..4 {
 
-        col_counter += 1;
-        row_count -= 1;
+			if board_matrix[_sub as usize][temp_left as usize] != piece {
+				left_right = false; 
+			}		
+				
+			if board_matrix[_sub as usize][temp_right as usize] != piece {
+				right_left = false; 
+			}			
 
-    }
+			temp_left += 1; 
+			temp_right -= 1; 			
+		} 
 
-    // check final result
-    if left_right == true || right_left == true {
-        return true
-    }
+		if right_left == true || left_right == true {
+			break; 
+		}
 
-    false
+		start_right -= 1; 
+		start_left += 1; 		
+
+	}
+
+
+	if left_right == true || right_left == true {
+		return true; 
+	}
+
+	false
+
 }
 
 
@@ -125,23 +144,21 @@ pub fn take_random_action(my_board: &mut Board, agent: Agent) {
 pub fn connect_game_cycle(rounds: i32){
 
     // create board
-    let mut my_board : Board = Board::new(7, 6);
+    let mut my_board : Board = Board::new(7, 6);	
+	
 
     // add players
     let mut agent1: Agent = Agent::new(1);
     let mut agent2: Agent = Agent::new(2);
+	
+    agent1.set_status(true);
 
     my_board.add_agent(agent1);
     my_board.add_agent(agent2);
+	my_board.print_board(); 
 
-	 // loop through agents
-    /*let agents : &Vec<Agent> = my_board.get_agents();
-    for a in agents {
-        println!("Agent: {:?}", a);
-    }*/
-
-    agent1.set_status(true);
-	
+	let result = check_diagonals(&my_board, agent1.get_piece()); 	
+	println!("Result: {:?}", result); 
 
 	loop {
 
