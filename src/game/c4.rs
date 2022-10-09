@@ -51,109 +51,110 @@ pub fn check_diagonals(my_board: &Board, piece: i32) -> bool {
 }
 
 
-pub fn check_vert_horiz(my_board: &Board, piece: i32) -> bool {
+pub fn check_verticals(my_board: &Board, piece: i32) -> bool {
 
-    // vars
     let board_matrix = my_board.get_board();
-	let rows = my_board.get_rows(); 
-	let cols = my_board.get_cols(); 
+	let _cols = my_board.get_cols() + 1;	
+	let _rows = my_board.get_rows() - 1; 
     let mut row_index = 0;
-    let mut vert_col_index = 0;
-	let mut horiz_col_index = 0; 
-	let mut start_vert_index = 0; 
-	let mut end_vert_index = 0; 
-	let mut start_horiz_index = 0; 
-	let mut end_horiz_index = 0; 
+	let mut start_index = 0; 
+	let mut end_index = 0; 
 
-
-	for row in board_matrix {
-
-		let mut temp_horiz = false; 
-		let mut temp_vert = false;
-		let mut vert_count : i32 = 0;
-		let mut horiz_count = 0;  
+	for _col in 0.._cols {	
+    	let mut vert_col_index = 0;
+		let mut temp_vert = false; 
 		let mut vert_check = false; 
-		let mut horiz_check = false;  
+		let mut vert_count = 0; 
 
-		for col in row {
+		for _row in 0.._rows {
 
-			let row_value = board_matrix[vert_col_index][row_index];
-			println!("Board indexes: {:?} : {:?}", row_index, vert_col_index);
-			println!("Value: {:}", col); 
-
-			if *col == piece  {
-				start_horiz_index = horiz_col_index; 
-				end_horiz_index = horiz_col_index + 3; 
-				println!("HORIZ Checks: {:?} : {:?}", start_horiz_index, end_horiz_index);
-				horiz_count = start_horiz_index as i32; 
-				horiz_check = true; 
-				if end_horiz_index > rows - 1 {
-					println!("Horiz whoops"); 
-					break; 
-				}
-			}
-	
-			if row_value == piece {
-				start_vert_index = vert_col_index; 
-				end_vert_index = vert_col_index + 3;
-				println!("VERT Checks: {:?} : {:?}", start_vert_index, end_vert_index);
-				vert_count = start_vert_index as i32;
+			let row_value = board_matrix[vert_col_index][row_index];				 
+			if row_value == piece && vert_check == false {
+				start_index = vert_col_index; 
+				end_index = vert_col_index + 3;
+				vert_count = start_index as i32;
 				vert_check = true; 
-				if end_vert_index > cols - 1 {
-					println!("Whoops");  
+				if end_index > _cols - 1 {
 					break; 
 				} 
 			}
-
-			if horiz_check == true {	
-				if *col == piece {
-					println!("HORIZ COUNT: {:}", horiz_count); 	
-					if horiz_count == end_horiz_index as i32 {
-						temp_horiz = true; 
-						break; 
-					}
-					horiz_count += 1; 
-				}
-			}
-
-				
+	
 			if vert_check == true && row_value == piece {
-				if row_value == piece {
-					println!("VERT COUNT: {:}", vert_count); 	
-					if vert_count == end_vert_index as i32 {
-						temp_vert = true; 
-						break; 
-					}
-					vert_count += 1; 
+				if vert_count == end_index as i32 {
+					temp_vert = true; 
+					break; 
 				}
+				vert_count += 1; 
 			}
-
-
-			if horiz_check == true && *col != piece {
-				horiz_count = 0; 
-				horiz_check = false; 
-			}
-
+	
 			if vert_check == true && row_value != piece {
 				vert_count = 0; 
 				vert_check = false; 
 			}
 
-
-			if vert_col_index < my_board.get_cols() - 1 {
-				vert_col_index += 1;
-			} 
-
-			horiz_col_index += 1; 
-
+			vert_col_index += 1; 
 		}
 
-		if temp_horiz == true || temp_vert == true {
+		
+		if temp_vert == true {
+			return true; 
+		}
+
+		row_index += 1;
+		vert_col_index = 0;  
+	}
+
+
+	false
+
+}
+
+pub fn check_horizontals(my_board: &Board, piece: i32) -> bool {
+	
+    let board_matrix = my_board.get_board();
+	let _rows = my_board.get_rows(); 
+	let mut horiz_col_index = 0; 
+
+	for row in board_matrix {
+
+		let mut temp_horiz = false; 
+		let mut horiz_count = 0;  
+		let mut horiz_check = false;  
+		let mut start_index = 0; 
+		let mut end_index = 0; 
+
+		for _col in row {
+
+			if *_col == piece && horiz_check == false{
+				start_index = horiz_col_index; 
+				end_index = horiz_col_index + 3; 
+				horiz_count = start_index as i32; 
+				horiz_check = true; 
+				if end_index > _rows - 1 {
+					break; 
+				}
+			}
+	
+			if horiz_check == true && *_col == piece {	
+				if horiz_count == end_index as i32 {
+					temp_horiz = true; 
+					break; 
+				}
+				horiz_count += 1; 
+			}
+
+			if horiz_check == true && *_col != piece {
+				horiz_count = 0; 
+				horiz_check = false; 
+			}
+
+			horiz_col_index += 1; 
+		}
+
+		if temp_horiz == true {
 			return true;  
 		} 
 
-		row_index += 1; 
-		vert_col_index = 0;
 		horiz_col_index = 0;  
 	}
 
@@ -170,8 +171,6 @@ pub fn get_available_positions(my_board: &mut Board) -> Vec<(usize, usize)> {
 	let col_counter = cols -1; 
 	println!("Board cols: {:?}", cols);
 	println!("Board rows: {:?}", rows); 
-
-	//println!("Rows: {:?}", row_counter); 
 
 	for _col in 0..col_counter {	
 		let mut row_counter = (rows - 1) as i32; 
@@ -196,7 +195,6 @@ pub fn take_random_action(my_board: &mut Board, agent: Agent) {
     let idx = rand::thread_rng().gen_range(0..position_vec.len() - 1);
     let choice = position_vec[idx];
 
-    /* randomly select from position vec */
     println!("Choice: {:?} {:?}", choice.0, choice.1);
 
     my_board.place_piece(choice.0, choice.1, agent.get_piece());
@@ -215,20 +213,9 @@ pub fn connect_game_cycle(rounds: i32){
 	
     agent1.set_status(true);
 
-	// create a board configuration
-	my_board.place_piece(2, 2, 1);
-	my_board.place_piece(3, 2, 1);
-	my_board.place_piece(4, 2, 1);
-	my_board.place_piece(5, 2, 1);
-	my_board.print_board(); 
 
-    let mut result = check_vert_horiz(&my_board, 1);
-	println!("RESULT: {:}", result);
- 
-
-	/*
     my_board.add_agent(agent1);
-    my_board.add_agent(agent2);
+    my_board.add_agent(agent2);	
 	my_board.print_board();
 
 	loop {
@@ -267,9 +254,7 @@ pub fn connect_game_cycle(rounds: i32){
 		// wait one second
         let second = time::Duration::from_millis(1000);
         thread::sleep(second);
-
-
-	} */
+	}
 }
 
 
@@ -319,7 +304,7 @@ mod c4_tests {
 		board.place_piece(2, 2, 1);
 		board.place_piece(3, 2, 1);
 
-        let mut result = check_vert_horiz(&board, 1);
+        let mut result = check_verticals(&board, 1);
         board.print_board();
 		println!("result: {:?}", result); 
         assert_eq!(result, true);
@@ -331,7 +316,7 @@ mod c4_tests {
 		board.place_piece(3, 2, 1);
 		board.place_piece(4, 2, 1);
 	
-        result = check_vert_horiz(&board, 1);
+        result = check_verticals(&board, 1);
         board.print_board();
 		println!("result: {:?}", result); 
         assert_eq!(result, true);
@@ -343,20 +328,81 @@ mod c4_tests {
 		board.place_piece(4, 2, 1);
 		board.place_piece(5, 2, 1);
 	
-        result = check_vert_horiz(&board, 1);
+        result = check_verticals(&board, 1);
         board.print_board();
 		println!("result: {:?}", result); 
         assert_eq!(result, true);
 
-		
-
     }
 
 	
+	#[test]
+	fn test_all_verticals() {		
+        let mut board : Board = Board::new(7, 6);
+		for _start_index in 0..7 {
+			for _start in 0..3 {
+				let mut shift_index = _start;
+				board.clear(); 
+				for _row in 0..4 {
+					//println!("{:?} : {:?}", shift_index, _start_index);
+					board.place_piece(shift_index, _start_index, 1); 
+					shift_index += 1; 
+				}
+				board.print_board();	
+				let loop_result = check_verticals(&board, 1); 
+        		assert_eq!(loop_result, true);
+			}
+		}
+	}
 
+	#[test]
+	fn test_horizontals() {
 
+        let mut board : Board = Board::new(7, 6);
+		let _rows = board.get_rows(); 
+		board.place_piece(0, 0, 1);
+		board.place_piece(0, 1, 1);
+		board.place_piece(0, 2, 1);
+		board.place_piece(0, 3, 1);
 
+        let mut result = check_horizontals(&board, 1);
+        board.print_board();
+		println!("result: {:?}", result); 
+        assert_eq!(result, true);
 
+	
+		// test offset
+		board.clear(); 		
+		board.place_piece(0, 1, 1);
+		board.place_piece(0, 2, 1);
+		board.place_piece(0, 3, 1);
+		board.place_piece(0, 4, 1);
+	
+        result = check_horizontals(&board, 1);
+        board.print_board();
+		println!("result: {:?}", result); 
+        assert_eq!(result, true);	
+	}
+
+	
+	#[test]
+	fn test_all_horizonals() {
+        let mut board : Board = Board::new(7, 6);
+		for _start_index in 0..6 {
+			for _start in 0..4 {
+				let mut shift_index = _start;
+				board.clear();  
+				for _row in 0..4 {
+					println!("{:?} : {:?}", _start_index, shift_index);
+					board.place_piece(_start_index, shift_index, 1); 
+					shift_index += 1;  
+				}
+				board.print_board(); 
+				let loop_result = check_horizontals(&board, 1); 
+        		assert_eq!(loop_result, true);
+			}	
+		}
+	}		
 }
 
 
