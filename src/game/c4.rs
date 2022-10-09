@@ -40,7 +40,6 @@ pub fn check_diagonals(my_board: &Board, piece: i32) -> bool {
 
 		start_right -= 1; 
 		start_left += 1; 		
-
 	}
 
 
@@ -49,49 +48,117 @@ pub fn check_diagonals(my_board: &Board, piece: i32) -> bool {
 	}
 
 	false
-
 }
 
 
 pub fn check_vert_horiz(my_board: &Board, piece: i32) -> bool {
 
     // vars
-    let mut horiz = true;
-    let mut vert = true;
-    let mut row_index = 0;
-    let mut col_index = 0;
     let board_matrix = my_board.get_board();
+	let rows = my_board.get_rows(); 
+	let cols = my_board.get_cols(); 
+    let mut row_index = 0;
+    let mut vert_col_index = 0;
+	let mut horiz_col_index = 0; 
+	let mut start_vert_index = 0; 
+	let mut end_vert_index = 0; 
+	let mut start_horiz_index = 0; 
+	let mut end_horiz_index = 0; 
 
-    // loop throuh board
-    for row in board_matrix {
-        let mut temp_horiz = true;
-        let mut temp_vert = true;
-        for col in row {
-            if *col != piece {
-                temp_horiz = false;
-            }
-            if board_matrix[col_index][row_index] != piece {
-                temp_vert = false;
-            }
-            col_index += 1;
-        }
 
-        if temp_horiz == true || temp_vert == true {
-            break;
-        } else {
-            horiz = false;
-            vert = false;
-        }
+	for row in board_matrix {
 
-        row_index += 1;
-        col_index = 0;
-    }
+		let mut temp_horiz = false; 
+		let mut temp_vert = false;
+		let mut vert_count : i32 = 0;
+		let mut horiz_count = 0;  
+		let mut vert_check = false; 
+		let mut horiz_check = false;  
 
-    if horiz == true || vert == true {
-        return true
-    }
+		for col in row {
 
-    return false
+			let row_value = board_matrix[vert_col_index][row_index];
+			println!("Board indexes: {:?} : {:?}", row_index, vert_col_index);
+			println!("Value: {:}", col); 
+
+			if *col == piece  {
+				start_horiz_index = horiz_col_index; 
+				end_horiz_index = horiz_col_index + 3; 
+				println!("HORIZ Checks: {:?} : {:?}", start_horiz_index, end_horiz_index);
+				horiz_count = start_horiz_index as i32; 
+				horiz_check = true; 
+				if end_horiz_index > rows - 1 {
+					println!("Horiz whoops"); 
+					break; 
+				}
+			}
+	
+			if row_value == piece {
+				start_vert_index = vert_col_index; 
+				end_vert_index = vert_col_index + 3;
+				println!("VERT Checks: {:?} : {:?}", start_vert_index, end_vert_index);
+				vert_count = start_vert_index as i32;
+				vert_check = true; 
+				if end_vert_index > cols - 1 {
+					println!("Whoops");  
+					break; 
+				} 
+			}
+
+			if horiz_check == true {	
+				if *col == piece {
+					println!("HORIZ COUNT: {:}", horiz_count); 	
+					if horiz_count == end_horiz_index as i32 {
+						temp_horiz = true; 
+						break; 
+					}
+					horiz_count += 1; 
+				}
+			}
+
+				
+			if vert_check == true && row_value == piece {
+				if row_value == piece {
+					println!("VERT COUNT: {:}", vert_count); 	
+					if vert_count == end_vert_index as i32 {
+						temp_vert = true; 
+						break; 
+					}
+					vert_count += 1; 
+				}
+			}
+
+
+			if horiz_check == true && *col != piece {
+				horiz_count = 0; 
+				horiz_check = false; 
+			}
+
+			if vert_check == true && row_value != piece {
+				vert_count = 0; 
+				vert_check = false; 
+			}
+
+
+			if vert_col_index < my_board.get_cols() - 1 {
+				vert_col_index += 1;
+			} 
+
+			horiz_col_index += 1; 
+
+		}
+
+		if temp_horiz == true || temp_vert == true {
+			return true;  
+		} 
+
+		row_index += 1; 
+		vert_col_index = 0;
+		horiz_col_index = 0;  
+	}
+
+
+    false
 }
 
 
@@ -139,11 +206,8 @@ pub fn take_random_action(my_board: &mut Board, agent: Agent) {
 
 pub fn connect_game_cycle(rounds: i32){
 
-    // create board
-
 	println!("Playing {:?} rounds of c4", rounds); 
-    let mut my_board : Board = Board::new(7, 6);	
-	
+    let mut my_board : Board = Board::new(7, 6);
 
     // add players
     let mut agent1: Agent = Agent::new(1);
@@ -151,12 +215,21 @@ pub fn connect_game_cycle(rounds: i32){
 	
     agent1.set_status(true);
 
-    my_board.add_agent(agent1);
-    my_board.add_agent(agent2);
+	// create a board configuration
+	my_board.place_piece(2, 2, 1);
+	my_board.place_piece(3, 2, 1);
+	my_board.place_piece(4, 2, 1);
+	my_board.place_piece(5, 2, 1);
 	my_board.print_board(); 
 
-	let result = check_diagonals(&my_board, agent1.get_piece()); 	
-	println!("Result: {:?}", result); 
+    let mut result = check_vert_horiz(&my_board, 1);
+	println!("RESULT: {:}", result);
+ 
+
+	/*
+    my_board.add_agent(agent1);
+    my_board.add_agent(agent2);
+	my_board.print_board();
 
 	loop {
 
@@ -195,7 +268,8 @@ pub fn connect_game_cycle(rounds: i32){
         let second = time::Duration::from_millis(1000);
         thread::sleep(second);
 
-	}
+
+	} */
 }
 
 
@@ -234,6 +308,51 @@ mod c4_tests {
         board.print_board();
         assert_eq!(result, true);
     }
+
+	
+	#[test]
+    fn test_verticals() {
+
+        let mut board : Board = Board::new(7, 6);
+		board.place_piece(0, 2, 1);
+		board.place_piece(1, 2, 1);
+		board.place_piece(2, 2, 1);
+		board.place_piece(3, 2, 1);
+
+        let mut result = check_vert_horiz(&board, 1);
+        board.print_board();
+		println!("result: {:?}", result); 
+        assert_eq!(result, true);
+
+		// test offset
+		board.clear(); 		
+		board.place_piece(1, 2, 1);
+		board.place_piece(2, 2, 1);
+		board.place_piece(3, 2, 1);
+		board.place_piece(4, 2, 1);
+	
+        result = check_vert_horiz(&board, 1);
+        board.print_board();
+		println!("result: {:?}", result); 
+        assert_eq!(result, true);
+	
+		// test offset again
+		board.clear(); 		
+		board.place_piece(2, 2, 1);
+		board.place_piece(3, 2, 1);
+		board.place_piece(4, 2, 1);
+		board.place_piece(5, 2, 1);
+	
+        result = check_vert_horiz(&board, 1);
+        board.print_board();
+		println!("result: {:?}", result); 
+        assert_eq!(result, true);
+
+		
+
+    }
+
+	
 
 
 

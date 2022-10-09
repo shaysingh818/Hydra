@@ -1,4 +1,3 @@
-use rand::Rng; 
 
 #[derive(Debug, Copy,  Clone)]
 pub struct Agent {

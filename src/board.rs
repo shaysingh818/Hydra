@@ -36,6 +36,10 @@ impl Board {
 		self.matrix = vec![vec![0; set_row]; set_col] 
 	}
 
+	pub fn clear(&mut self){	
+		self.matrix = vec![vec![0; self.rows]; self.cols] 
+	}
+
 	pub fn get_pos(&self, row: usize, col: usize) -> i32 {
 		self.matrix[row][col]
 	}
