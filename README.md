@@ -18,3 +18,4 @@ This purpose of the engine is to research different machine learning methods for
 6. Checkers
 7. Scrabble
 8. https://www.improvememory.org/brain-games/puzzle-games/colour-cell/
+9. Chess
