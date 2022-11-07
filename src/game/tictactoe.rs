@@ -106,10 +106,8 @@ pub fn take_random_action(my_board: &mut Board, agent: Agent) {
 	let choice = position_vec[idx]; 
 
 	/* randomly select from position vec */ 
-	println!("Choice: {:?} {:?}", choice.0, choice.1); 
-	
-	
-	my_board.place_piece(choice.0, choice.1, agent.get_piece()); 
+	println!("Choice: {:?} {:?}", choice.0, choice.1); 	
+	my_board.place_piece(choice.0, choice.1, agent); 
 }	
 
 

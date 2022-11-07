@@ -67,9 +67,9 @@ impl Board {
 		self.matrix[row][col] = 0; 
 	}
 
-	pub fn place_piece(&mut self, set_row: usize, set_col: usize, piece: i32) {	
+	pub fn place_piece(&mut self, set_row: usize, set_col: usize, agent: Agent) {	
 		self.curr_pos = (set_row, set_col); 
-		self.matrix[set_row][set_col] = piece; 
+		self.matrix[set_row][set_col] = agent.get_piece(); 
 	}
 
 	/* 
@@ -78,7 +78,6 @@ impl Board {
 	*/
 
 	pub fn is_full(&self) -> bool {
-
 		for row in &self.matrix {
 			for col in row {
 				if *col == 0 {
@@ -89,7 +88,7 @@ impl Board {
 		true
 	} 
 
-	pub fn diagonal_count(&self, piece: i32) -> (i32, i32) {
+	pub fn diagonal_count(&self, agent: Agent) -> (i32, i32) {
 		
 		let mut lr_diag_count = 0; 
 		let mut rl_diag_count = 0; 
@@ -98,11 +97,11 @@ impl Board {
 
 		for _col in &self.matrix {
 
-			if self.matrix[col_count][row_count as usize] == piece {
+			if self.matrix[col_count][row_count as usize] == agent.get_piece() {
 				lr_diag_count += 1; 				
 			}
 	
-			if self.matrix[col_count][col_count as usize] == piece {
+			if self.matrix[col_count][col_count as usize] == agent.get_piece() {
 				rl_diag_count += 1; 				
 			}
 
@@ -114,7 +113,7 @@ impl Board {
 	}
 
 
-	pub fn vertical_count(&self, piece: i32) -> (i32, i32) {
+	pub fn vertical_count(&self, agent: Agent) -> (i32, i32) {
 
 		let mut horiz = true; 
 		let mut vert = true; 
@@ -131,11 +130,11 @@ impl Board {
 			let mut temp_horiz_count = 0; 
 			for col in row {
 
-				if *col == piece {
+				if *col == agent.get_piece() {
 					temp_horiz_count += 1; 
 				} 
 
-				if self.matrix[col_index][row_index] == piece {
+				if self.matrix[col_index][row_index] == agent.get_piece() {
 					temp_vert_count += 1; 
 				} 
 				col_index += 1;

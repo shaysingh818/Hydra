@@ -197,7 +197,7 @@ pub fn take_random_action(my_board: &mut Board, agent: Agent) {
 
     println!("Choice: {:?} {:?}", choice.0, choice.1);
 
-    my_board.place_piece(choice.0, choice.1, agent.get_piece());
+    my_board.place_piece(choice.0, choice.1, agent);
 }
 
 
