@@ -71,9 +71,9 @@ pub fn minimax_f(
 			best_score = score;
 			best_move = (play.0, play.1);
 		}
+
+		board.pop_piece();  	 		
 	
-		board.print_board(); 
-		board.pop_piece();  	 
 	}
 
 	/* make highest scoring move and save board state */ 
@@ -89,23 +89,22 @@ pub fn minimax_f(
 		curr_depth + 1,
 		agent
 	);
-
+	
 	/* bubble up values from stack tree */ 
 	if current_score > best_score {
 		best_score = current_score; 
 		best_move = current_move; 
-	}  
-		
+	}
+
 	(best_score, best_move)
 }
-
 
 
 pub fn minimax_game_cycle() {
 
 	println!("Minimax goes here");
 
-	let mut board : Board = Board::new(4, 4);
+	let mut board : Board = Board::new(5, 5);
 	let mut agent1 : Agent = Agent::new(1); 
 	let mut agent2 : Agent = Agent::new(2); 
 
@@ -120,58 +119,47 @@ pub fn minimax_game_cycle() {
 
 	agent1.set_status(true);
 
-	board.print_board(); 
-
 	loop {
 
-		if agent1.get_status() == true && agent2.get_status() == false {
+		 if agent1.get_status() == true && agent2.get_status() == false {
 
-			/* agent 1 uses minimaxing algorithm */
+			/* make move with minimax algo */
 			let (current_score, current_move) = minimax_f(
-				&mut board,
-				0,
+				&mut board.clone(), 
+				0, 
 				agent1
-			);
-			
-			println!("Most optimal move: {:?}", current_move);  
+			); 
+			println!("Most optimal move: {:?}", current_move); 
 			board.place_piece(current_move.0, current_move.1, agent1); 
-	
+			board.print_board();
+
             agent1.set_status(false);
             agent2.set_status(true);
         }
 
-        // check if agent 1 wins
-        let diag_a1 = check_diagonals(&board, agent1.get_piece());
-        if diag_a1 == true {
-            println!("Agent 1 diag true");
-            break;
+		if determine_winner(&mut board, agent1) {
+			println!("AGENT 1 WINS! ");
+			break;  
+		}
+
+		if agent2.get_status() == true && agent1.get_status() == false {
+			println!("Agent 2 Goes: {:?}", agent2);
+			take_random_action(&mut board, agent2);
+			agent2.set_status(false);
+			agent1.set_status(true);
         }
+	
+		if determine_winner(&mut board, agent2) {
+			println!("AGENT 2 WINS! "); 
+			break; 
+		}
 
-        if agent2.get_status() == true && agent1.get_status() == false {
-            println!("Agent 2 Goes: {:?}", agent2);
-            take_random_action(&mut board, agent2);
-            agent2.set_status(false);
-            agent1.set_status(true);
-        }
+		board.print_board();
 
-		// check if agent 2 wins    
-        let diag_a2 = check_diagonals(&board, agent2.get_piece());
-        if diag_a2 == true {
-            println!("Agent 2 diag true");
-            break;
-        }
-
-        board.print_board();
-        println!("Diag 1: {:?}", diag_a1);
-        println!("Diag 2: {:?}", diag_a2);
-
-		// wait one second
         let second = time::Duration::from_millis(1000);
         let _now = time::Instant::now();
         thread::sleep(second);
-
-
-	}
+	}  
 
 }
 

@@ -40,13 +40,12 @@ pub fn check_diagonals(my_board: &Board, piece: i32) -> bool {
 pub fn check_vert_horiz(my_board: &Board, piece: i32) -> bool {
 
 	// vars
-	let mut horiz = true; 
-	let mut vert = true; 
+	let mut horiz = false; 
+	let mut vert = false;  
 	let mut row_index = 0; 
 	let mut col_index = 0; 
 	let board_matrix = my_board.get_board(); 
 
-	// loop throuh board
 	for row in board_matrix {
 		let mut temp_horiz = true; 
 		let mut temp_vert = true; 
@@ -57,26 +56,32 @@ pub fn check_vert_horiz(my_board: &Board, piece: i32) -> bool {
 			if board_matrix[col_index][row_index] != piece {
 				temp_vert = false; 
 			}
-			col_index += 1; 
+			col_index += 1;
 		}
 	
 		if temp_horiz == true || temp_vert == true {
+			if temp_horiz {
+				horiz = true; 
+			}
+
+			if temp_vert {
+				vert = true; 
+			}
 			break; 
-		} else {
-			horiz = false; 
-			vert = false; 
-		}
+		} 
 
 		row_index += 1; 
 		col_index = 0; 	
 	}
 
+
 	if horiz == true || vert == true {
 		return true
 	}
 
-	return false
+	false
 }
+
 
 pub fn get_available_positions(my_board: &mut Board) -> Vec<(usize, usize)> {
 	let mut position_vec = Vec::new(); 
@@ -108,7 +113,19 @@ pub fn take_random_action(my_board: &mut Board, agent: Agent) {
 	/* randomly select from position vec */ 
 	println!("Choice: {:?} {:?}", choice.0, choice.1); 	
 	my_board.place_piece(choice.0, choice.1, agent); 
-}	
+}
+
+
+pub fn determine_winner(board: &mut Board, agent: Agent) -> bool{
+
+	let diagonals = check_diagonals(board, agent.get_piece());
+	let vert_horiz = check_vert_horiz(board, agent.get_piece()); 
+
+	if diagonals == true || vert_horiz == true {
+		return true; 
+	}
+	false 
+}
 
 
 pub fn game_cycle(_rounds: i32) {
@@ -192,11 +209,22 @@ mod tests {
 	fn test_left_right_diagonal() {
 		
 		let mut board : Board = Board::new(3, 3); 
-		board.place_piece(0, 0, 1); 	
-		board.place_piece(1, 1, 1); 	
-		board.place_piece(2, 2, 1); 
+    	let mut agent1 : Agent = Agent::new(1); 
+		let mut agent2 : Agent = Agent::new(2); 
 
-		let result = check_diagonals(&board, 1);
+		/* add agents to board */   
+		agent1.set_score(0);   
+		agent2.set_score(0);
+    
+    	let agents : &Vec<Agent> = board.get_agents(); 
+    	for a in agents {
+        	println!("Agent: {:?}", a); 
+    	}
+		board.place_piece(0, 0, agent1); 	
+		board.place_piece(1, 1, agent1); 	
+		board.place_piece(2, 2, agent1); 
+
+		let result = check_diagonals(&board, agent1.get_piece());
 
 		board.print_board(); 
 		assert_eq!(result, true);  
@@ -207,11 +235,22 @@ mod tests {
 	fn test_right_left_diagonal() {
 		
 		let mut board : Board = Board::new(3, 3); 
-		board.place_piece(0, 2, 1); 	
-		board.place_piece(1, 1, 1); 	
-		board.place_piece(2, 0, 1); 
+    	let mut agent1 : Agent = Agent::new(1); 
+		let mut agent2 : Agent = Agent::new(2); 
 
-		let result = check_diagonals(&board, 1);
+		/* add agents to board */   
+		agent1.set_score(0);   
+		agent2.set_score(0);
+    
+    	let agents : &Vec<Agent> = board.get_agents(); 
+    	for a in agents {
+        	println!("Agent: {:?}", a); 
+    	}
+		board.place_piece(0, 2, agent1); 	
+		board.place_piece(1, 1, agent1); 	
+		board.place_piece(2, 0, agent1); 
+
+		let result = check_diagonals(&board, agent1.get_piece());
 
 		board.print_board(); 
 		assert_eq!(result, true);  
@@ -222,11 +261,22 @@ mod tests {
 	fn test_verticals() {
 		
 		let mut board : Board = Board::new(3, 3); 
-		board.place_piece(0, 0, 1); 	
-		board.place_piece(1, 0, 1); 	
-		board.place_piece(2, 0, 1); 
+    	let mut agent1 : Agent = Agent::new(1); 
+		let mut agent2 : Agent = Agent::new(2); 
 
-		let result = check_vert_horiz(&board, 1);
+		/* add agents to board */   
+		agent1.set_score(0);   
+		agent2.set_score(0);
+    
+    	let agents : &Vec<Agent> = board.get_agents(); 
+    	for a in agents {
+        	println!("Agent: {:?}", a); 
+    	}
+		board.place_piece(0, 0, agent1); 	
+		board.place_piece(1, 0, agent1); 	
+		board.place_piece(2, 0, agent1); 
+
+		let result = check_vert_horiz(&board, agent1.get_piece());
 
 		board.print_board(); 
 		assert_eq!(result, true);  
@@ -237,14 +287,56 @@ mod tests {
 	fn test_horizontals() {
 		
 		let mut board : Board = Board::new(3, 3); 
-		board.place_piece(0, 0, 1); 	
-		board.place_piece(0, 1, 1); 	
-		board.place_piece(0, 2, 1); 
+    	let mut agent1 : Agent = Agent::new(1); 
+		let mut agent2 : Agent = Agent::new(2); 
 
-		let result = check_vert_horiz(&board, 1);
+		/* add agents to board */   
+		agent1.set_score(0);   
+		agent2.set_score(0);
+    
+    	let agents : &Vec<Agent> = board.get_agents(); 
+    	for a in agents {
+        	println!("Agent: {:?}", a); 
+    	}
+		board.place_piece(0, 0, agent1); 	
+		board.place_piece(0, 1, agent1); 	
+		board.place_piece(0, 2, agent1); 
+
+		let result = check_vert_horiz(&board, agent1.get_piece());
 
 		board.print_board(); 
 		assert_eq!(result, true);  
+	}
+
+
+	#[test]
+	fn test_higher_dimension_boards() {
+
+		let mut board : Board = Board::new(5, 5);
+    	let mut agent1 : Agent = Agent::new(1); 
+		let mut agent2 : Agent = Agent::new(2); 
+
+		/* add agents to board */   
+		agent1.set_score(0);   
+		agent2.set_score(0);
+    
+    	let agents : &Vec<Agent> = board.get_agents(); 
+    	for a in agents {
+        	println!("Agent: {:?}", a); 
+    	}
+
+    	agent1.set_status(true);
+
+    	board.place_piece(4, 0, agent1);
+    	board.place_piece(4, 1, agent1);
+    	board.place_piece(4, 2, agent1);    
+    	board.place_piece(4, 3, agent1);    
+    	board.place_piece(4, 4, agent1);
+
+		let result = check_vert_horiz(&board, agent1.get_piece());	
+		assert_eq!(result, true);  
+		board.print_board(); 
+
 	}
 
 
