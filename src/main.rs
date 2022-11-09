@@ -4,10 +4,10 @@ pub mod game;
 pub mod engine;  
 
 use std::env;
-use crate::game::tictactoe; 
 use crate::game::c4; 
 use crate::board::Board;
 use crate::engine::minimax;  
+use crate::game::tictactoe;
 
 
 // load the board engine
@@ -27,7 +27,8 @@ pub fn match_command_arg(game_type: &str, rounds: &String) {
 
 	match game_type {
 		"tictactoe" => {
-			tictactoe::game_cycle(rnds); 
+			tictactoe::minimax_game_cycle(rnds);	
+ 
 		}, 
 		"c4" => {
 			c4::connect_game_cycle(rnds); 
@@ -35,7 +36,7 @@ pub fn match_command_arg(game_type: &str, rounds: &String) {
 
 		"tic-tac-minimax" => {
 			println!("Minimax testing goes here");
-			minimax::minimax_game_cycle();  
+			//minimax::minimax_game_cycle();  
 		},  
 		_ => {
 			println!("No game type selected"); 

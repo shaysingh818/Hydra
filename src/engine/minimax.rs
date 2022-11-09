@@ -6,7 +6,25 @@ use std::{thread, time};
 use rand::*; 
 use std::env;
 
+pub trait Minimax {
+	
+	/* regular naive minimaxing functions */ 
+	fn static_evaluation(board: &mut Board, agent: Agent) -> i32; 
+	fn minimax_f(
+		board: &mut Board, 
+		curr_depth: usize, 
+		agent: Agent
+	) -> (i32, (usize, usize));
 
+	/* negamaxing functions */ 
+	fn negamax_eval(board: &mut Board) -> i32; 
+	fn negamax(board: &mut Board, curr_depth: usize) -> (i32, (usize, usize)); 	
+	
+}
+
+
+
+/*
 pub fn static_evaluation(board: &mut Board, agent: Agent) -> i32{
 
 	/* get board dimensions */ 
@@ -104,7 +122,7 @@ pub fn minimax_game_cycle() {
 
 	println!("Minimax goes here");
 
-	let mut board : Board = Board::new(5, 5);
+	let mut board : Board = Board::new(6, 6);
 	let mut agent1 : Agent = Agent::new(1); 
 	let mut agent2 : Agent = Agent::new(2); 
 
@@ -163,7 +181,7 @@ pub fn minimax_game_cycle() {
 
 }
 
-
+*/
 
 
 
