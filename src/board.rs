@@ -6,7 +6,8 @@ pub struct Board {
 	cols: usize,
 	curr_pos: (usize, usize), 
 	matrix: Vec<Vec<i32>>,
-	agents: Vec<Agent>
+	agents: Vec<Agent>,
+	current_turn: usize
 }
 
 
@@ -18,7 +19,8 @@ impl Board {
 			cols: cols,
 			curr_pos: (0, 0), 
 			matrix: vec![vec![0; rows]; cols], 
-			agents: vec![]
+			agents: vec![],
+			current_turn: 0
 		}
 	}
 
@@ -54,14 +56,25 @@ impl Board {
 		&self.agents
 	}
 
+	pub fn get_agent_current_turn(&self) -> Agent {
+		self.agents[self.current_turn] 
+	}
+
 	pub fn print_board(&self){
 		for row in &self.matrix {
 			println!("Vec: {:?}", row); 
 		} 
 	}
 	
-	/* add method to remove most recently placed piece */ 
 	pub fn pop_piece(&mut self) {
+
+		/* go back to current agent turn */
+		if self.current_turn == 0 {
+			self.current_turn = self.agents.len() - 1; 
+		} else {
+			self.current_turn -= 1; 
+		}
+ 
 		let row = self.curr_pos.0; 
 		let col = self.curr_pos.1; 
 		self.matrix[row][col] = 0; 
@@ -86,6 +99,24 @@ impl Board {
 			}
 		}
 		true
+	}
+
+
+	pub fn available_moves(&mut self) -> Vec<(usize, usize)> {
+		let mut position_vec = Vec::new();
+    	let mut row_counter = 0;
+    	for row in &self.matrix {
+        	let mut col_counter = 0;
+        	for col in row {
+            	if *col == 0 {
+                	position_vec.push((row_counter, col_counter));
+            	}
+            	col_counter += 1;
+        	}
+        	row_counter += 1;
+    	}
+    	position_vec
+
 	} 
 
 	pub fn diagonal_count(&self, agent: Agent) -> (i32, i32) {
@@ -156,6 +187,21 @@ impl Board {
 
 		(horiz_count, vert_count)
 
+	}
+
+	/* function that alernates agents in between each move */ 
+	pub fn make_move(&mut self, play: (usize, usize)) {
+
+		let agent : Agent = self.agents[self.current_turn]; 
+		self.place_piece(play.0, play.1,agent); 
+	
+		if self.current_turn == self.agents.len() - 1  {
+			self.current_turn = 0; 
+		} else {
+			self.current_turn += 1; 
+		}
+	
+	
 	}
 
 }
