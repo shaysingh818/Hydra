@@ -2,7 +2,7 @@
 #[cfg(test)]
 mod game_logic {
 
-	use crate::Board;
+	use crate::board::Board;
 	use crate::agent::Agent;
 	use crate::tictactoe::*; 
 
@@ -145,13 +145,20 @@ mod game_logic {
 #[cfg(test)]
 mod minimax_testing {
 	
-	use crate::Board;
+	use crate::board::Board;
 	use crate::agent::Agent;
-	use crate::tictactoe::*;
 	use crate::engine::minimax::*; 
 
 	#[test]
 	fn test_minimax() {
+
+		/*
+		
+		: For this set of tests, the logic for creating board
+		  configurations can be more modular by looping through
+		  a set of existing stored configurations. 
+			
+		*/	
 	
 		let mut board : Board = Board::new(3, 3);
     	let mut agent1 : Agent = Agent::new(1); 
@@ -177,15 +184,15 @@ mod minimax_testing {
 		board.place_piece(1, 1, agent2);
 
 		/* call minimax function */ 
-		let (best_score, best_move) = Board::minimax(
+		let (_best_score, _best_move) = Board::minimax(
 			&mut board.clone(), 0, 
 			agent1, agent2, (0, 0), true
 		);
 
-		println!("TEST: {:?}", best_move); 
+		println!("TEST: {:?}", _best_move); 
 
 		let mut optimal_move = (2, 1); 
-		assert_eq!(optimal_move, best_move); 
+		assert_eq!(_best_move, optimal_move); 
 
 		/* test second configuration */ 
 		board.clear(); 
@@ -194,13 +201,28 @@ mod minimax_testing {
 		board.place_piece(1, 2, agent2);
 
 		/* call minimax with second configuration */ 	
-		let (best_score, best_move) = Board::minimax(
+		let (_best_score1, _best_move1) = Board::minimax(
 			&mut board.clone(), 0, 
 			agent1, agent2, (0, 0), true
 		);
 
 		optimal_move = (1, 1); 
-		assert_eq!(best_move, optimal_move); 
+		assert_eq!(_best_move1, optimal_move);
+		
+		/* test third configuration (see if agent1 tries to max) */ 
+		board.clear(); 
+		board.place_piece(1, 1, agent1); 	
+		board.place_piece(0, 1, agent2); 
+		board.place_piece(1, 0, agent2);
+	
+		/* call minimax with second configuration */ 	
+		let (_best_score2, _best_move2) = Board::minimax(
+			&mut board.clone(), 0, 
+			agent1, agent2, (0, 0), true
+		);
+
+		optimal_move = (0, 0); 
+		assert_eq!(_best_move2, optimal_move);
 	
 	}
 

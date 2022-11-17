@@ -146,8 +146,6 @@ impl Board {
 
 	pub fn vertical_count(&self, agent: Agent) -> (i32, i32) {
 
-		let mut horiz = true; 
-		let mut vert = true; 
 		let mut row_index = 0; 
 		let mut col_index = 0; 
 		let mut horiz_count = 0; 
@@ -155,10 +153,9 @@ impl Board {
 
 		for row in &self.matrix {
 
-			let mut temp_horiz = true; 
-			let mut temp_vert = true; 
 			let mut temp_vert_count = 0; 
 			let mut temp_horiz_count = 0; 
+
 			for col in row {
 
 				if *col == agent.get_piece() {

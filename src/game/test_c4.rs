@@ -3,7 +3,7 @@
 mod game_logic {
 
 	/* unit tests for connect 4 environment */ 
-	use crate::Board;
+	use crate::board::Board;
 	use crate::agent::Agent;  
 	use crate::c4::*; 
 

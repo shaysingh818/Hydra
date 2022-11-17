@@ -51,23 +51,23 @@ pub fn vert_horiz(board: &Board, agent: Agent) -> bool {
 
 	for row in board_matrix {
 		let mut temp_horiz = true; 
-		let mut temp_vert = true; 
+		let mut _temp_vert = true; 
 		for col in row {
 			if *col != agent.get_piece() {
 				temp_horiz = false; 
 			}
 			if board_matrix[col_index][row_index] != agent.get_piece() {
-				temp_vert = false; 
+				_temp_vert = false; 
 			}
 			col_index += 1;
 		}
 
-		if temp_horiz == true || temp_vert == true {
+		if temp_horiz == true || _temp_vert == true {
 			if temp_horiz {
 				horiz = true; 
 			}
 
-			if temp_vert {
+			if _temp_vert {
 				vert = true; 
 			}
 			break; 
@@ -173,9 +173,6 @@ impl Minimax for Board {
 	fn static_evaluation(board: &mut Board, agent: Agent, opp: Agent) -> i32{
 
 		/* get board dimensions */ 
-		let rows = board.get_rows(); 
-		let cols = board.get_cols();
-		let row_count = rows as i32;  
 		let mut score = 0;
 
 		/* check if board has diagonals or verticals */
@@ -211,7 +208,6 @@ impl Minimax for Board {
 			
 			/* if there's a winner, stop searching */ 
 			let winner = determine_winner(board, agent); 
-			let winner_opp = determine_winner(board, opp); 
 			let game_over = board.is_full(); 
 
 			/* if game is over or agent wins */ 
@@ -221,14 +217,14 @@ impl Minimax for Board {
 			} 
 
 			/* define local vars for function */ 
-			let mut best_score = 0; 
+			let mut _best_score = 0; 
 			let mut best_move = (0, 0);
 
 			/* switch best scores depending on the player */ 
 			if is_max {
-				best_score = -1000
+				_best_score = -1000
 			} else {
-				best_score = 1000; 
+				_best_score = 1000; 
 			}
 
 			/* go through each available move */ 
@@ -242,20 +238,20 @@ impl Minimax for Board {
 				}
 
 				/* recurse to the next state */ 	
-				let (current_score, current_move) = Board::minimax(
+				let (current_score, _current_move) = Board::minimax(
 					&mut board.clone(), curr_depth+1,  
 					agent, opp, play, !is_max
 				);
 
 				/* determine the best move and score */ 
 				if is_max {
-					if current_score > best_score {					
-						best_score = current_score; 
+					if current_score > _best_score {					
+						_best_score = current_score; 
 						best_move = play; 
 					}
 				} else {
-					if current_score < best_score {
-						best_score = current_score; 
+					if current_score < _best_score {
+						_best_score = current_score; 
 						best_move = play; 
 					}
 				}
@@ -263,7 +259,7 @@ impl Minimax for Board {
 				board.pop_piece();				
  
 			}
-			(best_score, best_move)	
+			(_best_score, best_move)	
 	}
 
 	fn negamax(
@@ -272,6 +268,8 @@ impl Minimax for Board {
 	) -> (i32, (usize, usize)) {
 		
 		/* if game is over or terminal state is reached stop recursing */
+		println!("Depth: {:?}", curr_depth); 
+		board.print_board(); 
 
 		(0, (0, 0)) 
 	}
@@ -286,7 +284,6 @@ pub fn test_minimax() {
     let mut board : Board = Board::new(3, 3);
     let mut agent1 : Agent = Agent::new(1); 
     let mut agent2 : Agent = Agent::new(2);	
-	let is_full = board.is_full();
 
     /* add agents to board */  
 	board.add_agent(agent1); 
@@ -306,10 +303,10 @@ pub fn test_minimax() {
 	agent2.set_status(true);
 
 	/* test board states that make no sense here */ 
-	board.place_piece(0, 2, agent1); 
+	board.place_piece(1, 1, agent1); 
 
-	board.place_piece(1, 0, agent2); 	
-	board.place_piece(1, 2, agent2); 
+	board.place_piece(0, 1, agent2); 	
+	board.place_piece(1, 0, agent2); 
 
 	let score = Board::static_evaluation(&mut board, agent1, agent2);
 	
@@ -330,8 +327,7 @@ pub fn test_minimax() {
 }
 
 
-
-pub fn minimax_game_cycle(rounds: i32){
+pub fn minimax_game_cycle(_rounds: i32){
 
 	println!("Minimax goes here");
 
@@ -353,7 +349,6 @@ pub fn minimax_game_cycle(rounds: i32){
     for a in agents {
         println!("Agent: {:?}", a); 
     }
-
 	
 	agent1.set_status(false); 
 	agent2.set_status(true);
@@ -361,7 +356,6 @@ pub fn minimax_game_cycle(rounds: i32){
 	
 	println!("Starting MINIMAX test.....");
 	
-	let curr_agent = board.get_agent_current_turn(); 
 		
 	/* start game cycle here */ 
 	while !is_full  {
@@ -398,11 +392,9 @@ pub fn minimax_game_cycle(rounds: i32){
 	
 		if agent1_status == true && agent2_status == false {
 				
-			/* get current agent */ 
-			let curr_agent = board.get_agent_current_turn(); 
 
 			/* make move with minimax algo */ 
-			let (current_score, current_move) = Board::minimax(
+			let (_current_score, current_move) = Board::minimax(
 				&mut board.clone(), 0, 
 				agent1, agent2,(0,0), true
 			);

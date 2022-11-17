@@ -1,10 +1,5 @@
-
-use crate::game::tictactoe::*; 
 use crate::board::{Board};
 use crate::agent::Agent;
-use std::{thread, time}; 
-use rand::*; 
-use std::env;
 
 /*
 	This file contains anything related to utilites needed for variations
