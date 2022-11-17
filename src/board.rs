@@ -36,10 +36,6 @@ impl Board {
 		self.rows
 	}
 
-	pub fn resize_board(&mut self, set_row: usize, set_col: usize){
-		self.matrix = vec![vec![0; set_row]; set_col] 
-	}
-
 	pub fn clear(&mut self){	
 		self.matrix = vec![vec![0; self.rows]; self.cols] 
 	}
@@ -64,6 +60,12 @@ impl Board {
 		for row in &self.matrix {
 			println!("Vec: {:?}", row); 
 		} 
+	}
+	
+	pub fn resize_board(&mut self, set_row: usize, set_col: usize){
+		self.rows = set_row; 
+		self.cols = set_col; 
+		self.matrix = vec![vec![0; set_row]; set_col] 
 	}
 	
 	pub fn pop_piece(&mut self) {
@@ -197,9 +199,136 @@ impl Board {
 		} else {
 			self.current_turn += 1; 
 		}
+	}
+}
+
+
+#[cfg(test)]
+mod board_instance {
+
 	
+	use crate::board::Board;	
+	use crate::agent::Agent;	
+  
+	/* tests for the board instance */ 
 	
+	#[test]
+    fn test_init_board() {
+	
+        let mut board : Board = Board::new(7, 6);
+		let mut board_rows = board.get_rows(); 
+		let mut board_cols = board.get_cols();
+		
+        assert_eq!(board_rows, 7);
+        assert_eq!(board_cols, 6);
+
+		board = Board::new(3, 3); 	
+		board_rows = board.get_rows(); 
+		board_cols = board.get_cols();
+	
+        assert_eq!(board_rows, 3);
+        assert_eq!(board_cols, 3);
+	}
+
+
+	#[test]
+	fn test_resize_board() {
+
+        let mut board : Board = Board::new(7, 6);
+		let mut board_rows = board.get_rows(); 
+		let mut board_cols = board.get_cols();
+
+        assert_eq!(board_rows, 7);
+        assert_eq!(board_cols, 6);
+
+		board.resize_board(3, 3);
+		 
+		board_rows = board.get_rows(); 
+		board_cols = board.get_cols();
+	
+        assert_eq!(board_rows, 3);
+        assert_eq!(board_cols, 3);
+	
+		board.resize_board(4, 4);
+
+		
+        assert_eq!(board.get_rows(), 4);
+        assert_eq!(board.get_cols(), 4);
+
+	}
+
+	
+	#[test]
+	fn test_pop_piece() {
+		
+        let mut board : Board = Board::new(3, 3);	
+		let mut agent1 : Agent = Agent::new(1);
+        let mut agent2 : Agent = Agent::new(2);
+
+        /* add agents to board */	
+		board.add_agent(agent1); 
+		board.add_agent(agent2);  
+        agent1.set_score(0);
+        agent2.set_score(0);
+
+        let agents : &Vec<Agent> = board.get_agents();
+        for a in agents {
+            println!("Agent: {:?}", a);
+        }
+	
+		agent1.set_status(false); 
+		agent2.set_status(true); 
+
+		/* test first board configuration */ 
+		board.place_piece(0, 2, agent1); 	
+		board.place_piece(0, 1, agent2); 
+		board.place_piece(1, 1, agent1);
+
+		/* pop piece */ 
+		board.pop_piece();
+        assert_eq!(board.get_pos(1,1), 0);
+	
+		/*
+		board.pop_piece();
+        assert_eq!(board.get_pos(0,1), 0);
+	
+		board.pop_piece();
+        assert_eq!(board.get_pos(0,2), 0); */
+
+		
+
+	}
+
+ 
+	#[test]
+	fn test_place_piece() {
+
+	}
+
+	 
+	#[test]
+	fn test_make_move() {
+
+	} 
+
+	 
+	#[test]
+	fn test_add_agent_to_board() {
+
+	}
+
+	 
+	#[test]
+	fn test_agent_turn_cycle() {
+
+	}
+
+	 
+	#[test]
+	fn test_board_availability() {
+
 	}
 
 }
+
 
