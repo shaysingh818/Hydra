@@ -27,8 +27,7 @@ pub fn match_command_arg(game_type: &str, rounds: &String) {
 
 	match game_type {
 		"tictactoe" => {
-			tictactoe::test_minimax();
-				
+			tictactoe::test_minimax();	
 			//tictactoe::minimax_game_cycle(rnds);  
  
 		}, 

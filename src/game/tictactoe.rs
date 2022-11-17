@@ -170,7 +170,7 @@ pub fn game_cycle(_rounds: i32) {
 impl Minimax for Board {
 
 	
-	fn static_evaluation(board: &mut Board, agent: Agent) -> i32{
+	fn static_evaluation(board: &mut Board, agent: Agent, opp: Agent) -> i32{
 
 		/* get board dimensions */ 
 		let rows = board.get_rows(); 
@@ -180,10 +180,17 @@ impl Minimax for Board {
 
 		/* check if board has diagonals or verticals */
 		let diag = diagonals(board, agent); 
-		let verts = vert_horiz(board, agent); 
+		let verts = vert_horiz(board, agent);	
+		let opp_diag = diagonals(board, opp); 
+		let opp_verts = vert_horiz(board, opp); 
+
 
 		if diag || verts {
 			score = 10; 
+		}
+
+		if opp_diag || opp_verts {
+			score = -10; 
 		}
 
 
@@ -202,33 +209,15 @@ impl Minimax for Board {
 	) -> (i32, (usize, usize)) {
 
 			
-			/* get score of current board state */ 
-			let mut score = Self::static_evaluation(board, agent);
-			if !is_max {
-				score = Self::static_evaluation(board, opp); 
-			}
-
-			/* debug values at certain depths */ 
-			//println!("ROOT MOVE: {:?}", root_move);
-			//println!("Score: {:?}", score); 	
-			println!("Curr depth: {:?}", curr_depth);
-			if curr_depth == 3 {
-				board.print_board(); 
-				println!("ROOT MOVE: {:?}", root_move);
-				println!("Score: {:?}", score); 	
-			} 
-
-			/* stop at max depth */
-			if curr_depth == 9 {
-				return (0, (0, 0)); 
-			}
-
 			/* if there's a winner, stop searching */ 
 			let winner = determine_winner(board, agent); 
 			let winner_opp = determine_winner(board, opp); 
-			if winner || winner_opp {
-				
-				return (0, (0, 0)); 
+			let game_over = board.is_full(); 
+
+			/* if game is over or agent wins */ 
+			if winner || game_over {
+				let score = Self::static_evaluation(board, agent, opp); 
+				return (score, root_move); 
 			} 
 
 			/* define local vars for function */ 
@@ -241,12 +230,10 @@ impl Minimax for Board {
 			} else {
 				best_score = 1000; 
 			}
-	
 
 			/* go through each available move */ 
 			for play in board.available_moves() {
 
-		
 				/* make move */
 				if is_max {
 					board.place_piece(play.0, play.1, agent); 
@@ -254,15 +241,15 @@ impl Minimax for Board {
 					board.place_piece(play.0, play.1, opp); 
 				}
 
-
 				/* recurse to the next state */ 	
 				let (current_score, current_move) = Board::minimax(
-					board, curr_depth+1,  
+					&mut board.clone(), curr_depth+1,  
 					agent, opp, play, !is_max
 				);
 
+				/* determine the best move and score */ 
 				if is_max {
-					if current_score > best_score {
+					if current_score > best_score {					
 						best_score = current_score; 
 						best_move = play; 
 					}
@@ -273,15 +260,10 @@ impl Minimax for Board {
 					}
 				}
 
-
-				board.pop_piece();  		
-				
+				board.pop_piece();				
  
 			}
-	
-	
 			(best_score, best_move)	
-		 
 	}
 
 	fn negamax(
@@ -326,10 +308,10 @@ pub fn test_minimax() {
 	/* test board states that make no sense here */ 
 	board.place_piece(0, 2, agent1); 
 
-	board.place_piece(1, 1, agent2); 	
+	board.place_piece(1, 0, agent2); 	
 	board.place_piece(1, 2, agent2); 
 
-	let score = Board::static_evaluation(&mut board, agent1);
+	let score = Board::static_evaluation(&mut board, agent1, agent2);
 	
 	/* make move with minimax algo */ 
 	let (current_score, current_move) = Board::minimax(
@@ -338,7 +320,7 @@ pub fn test_minimax() {
 	);
 
 	/* place most optimal move */  
-	println!("Most optimal move: {:?}", current_move);  
+	println!("Most optimal move: {:?} {:?}", current_move, current_score);  
 	board.print_board(); 
 	board.place_piece(current_move.0, current_move.1, agent1);
 	println!("=========================");  

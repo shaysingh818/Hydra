@@ -138,5 +138,72 @@ mod game_logic {
 		board.print_board(); 
 
 	}
-
 }
+
+
+
+#[cfg(test)]
+mod minimax_testing {
+	
+	use crate::Board;
+	use crate::agent::Agent;
+	use crate::tictactoe::*;
+	use crate::engine::minimax::*; 
+
+	#[test]
+	fn test_minimax() {
+	
+		let mut board : Board = Board::new(3, 3);
+    	let mut agent1 : Agent = Agent::new(1); 
+		let mut agent2 : Agent = Agent::new(2); 
+
+		/* add agents to board */  
+		board.add_agent(agent1); 
+		board.add_agent(agent2);  
+		agent1.set_score(0);   
+		agent2.set_score(0);
+    
+    	let agents : &Vec<Agent> = board.get_agents(); 
+    	for a in agents {
+        	println!("Agent: {:?}", a); 
+    	}
+
+		agent1.set_status(false); 
+		agent2.set_status(true); 
+
+		/* test first board configuration */ 
+		board.place_piece(0, 2, agent1); 	
+		board.place_piece(0, 1, agent2); 
+		board.place_piece(1, 1, agent2);
+
+		/* call minimax function */ 
+		let (best_score, best_move) = Board::minimax(
+			&mut board.clone(), 0, 
+			agent1, agent2, (0, 0), true
+		);
+
+		println!("TEST: {:?}", best_move); 
+
+		let mut optimal_move = (2, 1); 
+		assert_eq!(optimal_move, best_move); 
+
+		/* test second configuration */ 
+		board.clear(); 
+		board.place_piece(0, 2, agent1); 	
+		board.place_piece(1, 0, agent2); 
+		board.place_piece(1, 2, agent2);
+
+		/* call minimax with second configuration */ 	
+		let (best_score, best_move) = Board::minimax(
+			&mut board.clone(), 0, 
+			agent1, agent2, (0, 0), true
+		);
+
+		optimal_move = (1, 1); 
+		assert_eq!(best_move, optimal_move); 
+	
+	}
+
+	
+}
+

@@ -17,7 +17,7 @@ use std::env;
 pub trait Minimax {
 	
 	/* evaluate state of board from agent view */ 
-	fn static_evaluation(board: &mut Board, agent: Agent) -> i32;
+	fn static_evaluation(board: &mut Board, agent: Agent, opp: Agent) -> i32;
  
 	/* maximize player moves using recursion */ 
 	fn minimax(
