@@ -1,231 +1,208 @@
-
 #[cfg(test)]
 mod game_logic {
 
-	use crate::board::Board;
-	use crate::agent::Agent;
-	use crate::tictactoe::*; 
+    use crate::agent::Agent;
+    use crate::board::Board;
+    use crate::tictactoe::*;
 
-	#[test]
-	fn test_left_right_diagonal() {
-		
-		let mut board : Board = Board::new(3, 3); 
-    	let mut agent1 : Agent = Agent::new(1); 
-		let mut agent2 : Agent = Agent::new(2); 
+    #[test]
+    fn test_left_right_diagonal() {
+        let mut board: Board = Board::new(3, 3);
+        let mut agent1: Agent = Agent::new(1);
+        let mut agent2: Agent = Agent::new(2);
 
-		/* add agents to board */   
-		agent1.set_score(0);   
-		agent2.set_score(0);
-    
-    	let agents : &Vec<Agent> = board.get_agents(); 
-    	for a in agents {
-        	println!("Agent: {:?}", a); 
-    	}
-		board.place_piece(0, 0, agent1); 	
-		board.place_piece(1, 1, agent1); 	
-		board.place_piece(2, 2, agent1); 
+        /* add agents to board */
+        agent1.set_score(0);
+        agent2.set_score(0);
 
-		let result = diagonals(&board, agent1);
+        let agents: &Vec<Agent> = board.get_agents();
+        for a in agents {
+            println!("Agent: {:?}", a);
+        }
+        board.place_piece(0, 0, agent1);
+        board.place_piece(1, 1, agent1);
+        board.place_piece(2, 2, agent1);
 
-		board.print_board(); 
-		assert_eq!(result, true);  
-	}
-	
-	#[test]
-	fn test_right_left_diagonal() {
-		
-		let mut board : Board = Board::new(3, 3); 
-    	let mut agent1 : Agent = Agent::new(1); 
-		let mut agent2 : Agent = Agent::new(2); 
+        let result = diagonals(&board, agent1);
 
-		/* add agents to board */   
-		agent1.set_score(0);   
-		agent2.set_score(0);
-    
-    	let agents : &Vec<Agent> = board.get_agents(); 
-    	for a in agents {
-        	println!("Agent: {:?}", a); 
-    	}
-		board.place_piece(0, 2, agent1); 	
-		board.place_piece(1, 1, agent1); 	
-		board.place_piece(2, 0, agent1); 
+        board.print_board();
+        assert_eq!(result, true);
+    }
 
-		let result = diagonals(&board, agent1);
+    #[test]
+    fn test_right_left_diagonal() {
+        let mut board: Board = Board::new(3, 3);
+        let mut agent1: Agent = Agent::new(1);
+        let mut agent2: Agent = Agent::new(2);
 
-		board.print_board(); 
-		assert_eq!(result, true);  
-	}
+        /* add agents to board */
+        agent1.set_score(0);
+        agent2.set_score(0);
 
-	
-	#[test]
-	fn test_verticals() {
-		
-		let mut board : Board = Board::new(3, 3); 
-    	let mut agent1 : Agent = Agent::new(1); 
-		let mut agent2 : Agent = Agent::new(2); 
+        let agents: &Vec<Agent> = board.get_agents();
+        for a in agents {
+            println!("Agent: {:?}", a);
+        }
+        board.place_piece(0, 2, agent1);
+        board.place_piece(1, 1, agent1);
+        board.place_piece(2, 0, agent1);
 
-		/* add agents to board */   
-		agent1.set_score(0);   
-		agent2.set_score(0);
-    
-    	let agents : &Vec<Agent> = board.get_agents(); 
-    	for a in agents {
-        	println!("Agent: {:?}", a); 
-    	}
-		board.place_piece(0, 0, agent1); 	
-		board.place_piece(1, 0, agent1); 	
-		board.place_piece(2, 0, agent1); 
+        let result = diagonals(&board, agent1);
 
-		let result = vert_horiz(&board, agent1);
+        board.print_board();
+        assert_eq!(result, true);
+    }
 
-		board.print_board(); 
-		assert_eq!(result, true);  
-	}
+    #[test]
+    fn test_verticals() {
+        let mut board: Board = Board::new(3, 3);
+        let mut agent1: Agent = Agent::new(1);
+        let mut agent2: Agent = Agent::new(2);
 
-	
-	#[test]
-	fn test_horizontals() {
-		
-		let mut board : Board = Board::new(3, 3); 
-    	let mut agent1 : Agent = Agent::new(1); 
-		let mut agent2 : Agent = Agent::new(2); 
+        /* add agents to board */
+        agent1.set_score(0);
+        agent2.set_score(0);
 
-		/* add agents to board */   
-		agent1.set_score(0);   
-		agent2.set_score(0);
-    
-    	let agents : &Vec<Agent> = board.get_agents(); 
-    	for a in agents {
-        	println!("Agent: {:?}", a); 
-    	}
-		board.place_piece(0, 0, agent1); 	
-		board.place_piece(0, 1, agent1); 	
-		board.place_piece(0, 2, agent1); 
+        let agents: &Vec<Agent> = board.get_agents();
+        for a in agents {
+            println!("Agent: {:?}", a);
+        }
+        board.place_piece(0, 0, agent1);
+        board.place_piece(1, 0, agent1);
+        board.place_piece(2, 0, agent1);
 
-		let result = vert_horiz(&board, agent1);
+        let result = vert_horiz(&board, agent1);
 
-		board.print_board(); 
-		assert_eq!(result, true);  
-	}
+        board.print_board();
+        assert_eq!(result, true);
+    }
 
-	
-	#[test]
-	fn test_higher_dimension_boards() {
+    #[test]
+    fn test_horizontals() {
+        let mut board: Board = Board::new(3, 3);
+        let mut agent1: Agent = Agent::new(1);
+        let mut agent2: Agent = Agent::new(2);
 
-		let mut board : Board = Board::new(5, 5);
-    	let mut agent1 : Agent = Agent::new(1); 
-		let mut agent2 : Agent = Agent::new(2); 
+        /* add agents to board */
+        agent1.set_score(0);
+        agent2.set_score(0);
 
-		/* add agents to board */   
-		agent1.set_score(0);   
-		agent2.set_score(0);
-    
-    	let agents : &Vec<Agent> = board.get_agents(); 
-    	for a in agents {
-        	println!("Agent: {:?}", a); 
-    	}
+        let agents: &Vec<Agent> = board.get_agents();
+        for a in agents {
+            println!("Agent: {:?}", a);
+        }
+        board.place_piece(0, 0, agent1);
+        board.place_piece(0, 1, agent1);
+        board.place_piece(0, 2, agent1);
 
-    	agent1.set_status(true);
+        let result = vert_horiz(&board, agent1);
 
-    	board.place_piece(4, 0, agent1);
-    	board.place_piece(4, 1, agent1);
-    	board.place_piece(4, 2, agent1);    
-    	board.place_piece(4, 3, agent1);    
-    	board.place_piece(4, 4, agent1);
+        board.print_board();
+        assert_eq!(result, true);
+    }
 
-		let result = vert_horiz(&board, agent1);	
-		assert_eq!(result, true);  
-		board.print_board(); 
+    #[test]
+    fn test_higher_dimension_boards() {
+        let mut board: Board = Board::new(5, 5);
+        let mut agent1: Agent = Agent::new(1);
+        let mut agent2: Agent = Agent::new(2);
 
-	}
+        /* add agents to board */
+        agent1.set_score(0);
+        agent2.set_score(0);
+
+        let agents: &Vec<Agent> = board.get_agents();
+        for a in agents {
+            println!("Agent: {:?}", a);
+        }
+
+        agent1.set_status(true);
+
+        board.place_piece(4, 0, agent1);
+        board.place_piece(4, 1, agent1);
+        board.place_piece(4, 2, agent1);
+        board.place_piece(4, 3, agent1);
+        board.place_piece(4, 4, agent1);
+
+        let result = vert_horiz(&board, agent1);
+        assert_eq!(result, true);
+        board.print_board();
+    }
 }
-
-
 
 #[cfg(test)]
 mod minimax_testing {
-	
-	use crate::board::Board;
-	use crate::agent::Agent;
-	use crate::engine::minimax::*; 
 
-	#[test]
-	fn test_minimax() {
+    use crate::agent::Agent;
+    use crate::board::Board;
+    use crate::engine::minimax::*;
 
-		/*
-		
-		: For this set of tests, the logic for creating board
-		  configurations can be more modular by looping through
-		  a set of existing stored configurations. 
-			
-		*/	
-	
-		let mut board : Board = Board::new(3, 3);
-    	let mut agent1 : Agent = Agent::new(1); 
-		let mut agent2 : Agent = Agent::new(2); 
+    #[test]
+    fn test_minimax() {
+        /*
 
-		/* add agents to board */  
-		board.add_agent(agent1); 
-		board.add_agent(agent2);  
-		agent1.set_score(0);   
-		agent2.set_score(0);
-    
-    	let agents : &Vec<Agent> = board.get_agents(); 
-    	for a in agents {
-        	println!("Agent: {:?}", a); 
-    	}
+        : For this set of tests, the logic for creating board
+          configurations can be more modular by looping through
+          a set of existing stored configurations.
 
-		agent1.set_status(false); 
-		agent2.set_status(true); 
+        */
 
-		/* test first board configuration */ 
-		board.place_piece(0, 2, agent1); 	
-		board.place_piece(0, 1, agent2); 
-		board.place_piece(1, 1, agent2);
+        let mut board: Board = Board::new(3, 3);
+        let mut agent1: Agent = Agent::new(1);
+        let mut agent2: Agent = Agent::new(2);
 
-		/* call minimax function */ 
-		let (_best_score, _best_move) = Board::minimax(
-			&mut board.clone(), 0, 
-			agent1, agent2, (0, 0), true
-		);
+        /* add agents to board */
+        board.add_agent(agent1);
+        board.add_agent(agent2);
+        agent1.set_score(0);
+        agent2.set_score(0);
 
-		println!("TEST: {:?}", _best_move); 
+        let agents: &Vec<Agent> = board.get_agents();
+        for a in agents {
+            println!("Agent: {:?}", a);
+        }
 
-		let mut optimal_move = (2, 1); 
-		assert_eq!(_best_move, optimal_move); 
+        agent1.set_status(false);
+        agent2.set_status(true);
 
-		/* test second configuration */ 
-		board.clear(); 
-		board.place_piece(0, 2, agent1); 	
-		board.place_piece(1, 0, agent2); 
-		board.place_piece(1, 2, agent2);
+        /* test first board configuration */
+        board.place_piece(0, 2, agent1);
+        board.place_piece(0, 1, agent2);
+        board.place_piece(1, 1, agent2);
 
-		/* call minimax with second configuration */ 	
-		let (_best_score1, _best_move1) = Board::minimax(
-			&mut board.clone(), 0, 
-			agent1, agent2, (0, 0), true
-		);
+        /* call minimax function */
+        let (_best_score, _best_move) =
+            Board::minimax(&mut board.clone(), 0, agent1, agent2, (0, 0), true);
 
-		optimal_move = (1, 1); 
-		assert_eq!(_best_move1, optimal_move);
-		
-		/* test third configuration (see if agent1 tries to max) */ 
-		board.clear(); 
-		board.place_piece(1, 1, agent1); 	
-		board.place_piece(0, 1, agent2); 
-		board.place_piece(1, 0, agent2);
-	
-		/* call minimax with second configuration */ 	
-		let (_best_score2, _best_move2) = Board::minimax(
-			&mut board.clone(), 0, 
-			agent1, agent2, (0, 0), true
-		);
+        println!("TEST: {:?}", _best_move);
 
-		optimal_move = (0, 0); 
-		assert_eq!(_best_move2, optimal_move);
-	
-	}
+        let mut optimal_move = (2, 1);
+        assert_eq!(_best_move, optimal_move);
 
-	
+        /* test second configuration */
+        board.clear();
+        board.place_piece(0, 2, agent1);
+        board.place_piece(1, 0, agent2);
+        board.place_piece(1, 2, agent2);
+
+        /* call minimax with second configuration */
+        let (_best_score1, _best_move1) =
+            Board::minimax(&mut board.clone(), 0, agent1, agent2, (0, 0), true);
+
+        optimal_move = (1, 1);
+        assert_eq!(_best_move1, optimal_move);
+
+        /* test third configuration (see if agent1 tries to max) */
+        board.clear();
+        board.place_piece(1, 1, agent1);
+        board.place_piece(0, 1, agent2);
+        board.place_piece(1, 0, agent2);
+
+        /* call minimax with second configuration */
+        let (_best_score2, _best_move2) =
+            Board::minimax(&mut board.clone(), 0, agent1, agent2, (0, 0), true);
+
+        optimal_move = (0, 0);
+        assert_eq!(_best_move2, optimal_move);
+    }
 }
-
