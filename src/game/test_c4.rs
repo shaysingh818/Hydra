@@ -27,8 +27,6 @@ mod game_logic {
         board.place_piece(3, 3, agent1);
 
         let result = check_diagonals(&board, agent1.get_piece());
-
-        board.print_board();
         assert_eq!(result, true);
     }
 
@@ -52,8 +50,6 @@ mod game_logic {
         board.place_piece(3, 0, agent1);
 
         let result = check_diagonals(&board, agent1.get_piece());
-
-        board.print_board();
         assert_eq!(result, true);
     }
 
@@ -78,8 +74,6 @@ mod game_logic {
         board.place_piece(3, 2, agent1);
 
         let mut result = check_verticals(&board, agent1.get_piece());
-        board.print_board();
-        println!("result: {:?}", result);
         assert_eq!(result, true);
 
         /* test offset */
@@ -90,8 +84,6 @@ mod game_logic {
         board.place_piece(4, 2, agent1);
 
         result = check_verticals(&board, agent1.get_piece());
-        board.print_board();
-        println!("result: {:?}", result);
         assert_eq!(result, true);
 
         /* test offset again */
@@ -102,8 +94,6 @@ mod game_logic {
         board.place_piece(5, 2, agent1);
 
         result = check_verticals(&board, agent1.get_piece());
-        board.print_board();
-        println!("result: {:?}", result);
         assert_eq!(result, true);
     }
 
@@ -131,7 +121,6 @@ mod game_logic {
                     board.place_piece(shift_index, _start_index, agent1);
                     shift_index += 1;
                 }
-                board.print_board();
                 let loop_result = check_verticals(&board, agent1.get_piece());
                 assert_eq!(loop_result, true);
             }
@@ -159,8 +148,6 @@ mod game_logic {
         board.place_piece(0, 3, agent1);
 
         let mut result = check_horizontals(&board, agent1.get_piece());
-        board.print_board();
-        println!("result: {:?}", result);
         assert_eq!(result, true);
 
         // test offset
@@ -171,8 +158,6 @@ mod game_logic {
         board.place_piece(0, 4, agent1);
 
         result = check_horizontals(&board, agent1.get_piece());
-        board.print_board();
-        println!("result: {:?}", result);
         assert_eq!(result, true);
     }
 
@@ -195,11 +180,9 @@ mod game_logic {
                 let mut shift_index = _start;
                 board.clear();
                 for _row in 0..4 {
-                    println!("{:?} : {:?}", _start_index, shift_index);
                     board.place_piece(_start_index, shift_index, agent1);
                     shift_index += 1;
                 }
-                board.print_board();
                 let loop_result = check_horizontals(&board, agent1.get_piece());
                 assert_eq!(loop_result, true);
             }

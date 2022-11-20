@@ -10,8 +10,12 @@ use crate::board::Board;
 */
 
 pub trait Minimax {
-    /* evaluate state of board from agent view */
+
+    /* evaluation function for regular minimax */
     fn static_evaluation(board: &mut Board, agent: Agent, opp: Agent) -> i32;
+
+    /* negamax evaluation function */ 
+    fn negmax_eval(board: &mut Board) -> i32; 
 
     /* maximize player moves using recursion */
     fn minimax(
@@ -23,6 +27,11 @@ pub trait Minimax {
         is_max: bool,
     ) -> (i32, (usize, usize));
 
-    /* this one is hard */
-    fn negamax(board: &mut Board, curr_depth: usize) -> (i32, (usize, usize));
+    /* score without knowing who the player is */
+    fn negamax(
+        board: &mut Board, 
+        curr_depth: usize,
+        max_depth: usize
+    ) -> (i32, (usize, usize));
+
 }

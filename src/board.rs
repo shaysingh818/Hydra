@@ -301,14 +301,140 @@ mod board_instance {
 
     /* these tests need to work before we can implement negamaxing */
     #[test]
-    fn test_make_move() {}
+    fn test_make_move() {
+
+        let mut board: Board = Board::new(3, 3);
+        let mut agent1: Agent = Agent::new(1);
+        let mut agent2: Agent = Agent::new(2);
+
+        /* add agents to board */
+        board.add_agent(agent1);
+        board.add_agent(agent2);
+        agent1.set_score(0);
+        agent2.set_score(0);
+
+        /* iterate through agent list */
+        let agents: &Vec<Agent> = board.get_agents();
+        for a in agents {
+            println!("Agent: {:?}", a);
+        }
+ 
+        /* set agent status */
+        agent1.set_status(false);
+        agent2.set_status(true);
+
+        /* make a set of moves and check board state */
+        board.make_move((1,1));
+        assert_eq!(board.get_pos(1, 1), 1);
+
+        board.make_move((1,2));
+        assert_eq!(board.get_pos(1, 2), 2);
+ 
+        board.make_move((1,0));
+        assert_eq!(board.get_pos(1, 0), 1);
+ 
+        board.make_move((2,1));
+        assert_eq!(board.get_pos(2, 1), 2);
+    }
 
     #[test]
-    fn test_add_agent_to_board() {}
+    fn test_add_agent_to_board() {
+
+        let mut board: Board = Board::new(3, 3);
+
+        /* add 1000 agents */ 
+        for item in 0..1000 {
+            let mut temp_agent : Agent = Agent::new(item);
+            temp_agent.set_score(0); 
+            board.add_agent(temp_agent); 
+        }
+
+        /* check number of agents on board */  
+        assert_eq!(board.get_agents().len(), 1000);
+
+        /* test mutability */ 
+        for item in 0..10 {
+            let mut temp_agent : Agent = Agent::new(item);
+            temp_agent.set_score(0); 
+            board.add_agent(temp_agent); 
+        }
+
+        /* check number of agents on board */  
+        assert_eq!(board.get_agents().len(), 1010);
+
+    }
 
     #[test]
-    fn test_agent_turn_cycle() {}
+    fn test_agent_turn_cycle() {
+
+        /* create board instance */ 
+        let mut board: Board = Board::new(3, 3);
+        let mut agent1: Agent = Agent::new(1);
+        let mut agent2: Agent = Agent::new(2);
+
+        /* add agents to board */
+        board.add_agent(agent1);
+        board.add_agent(agent2);
+        agent1.set_score(0);
+        agent2.set_score(0);
+
+        /* iterate through agent list */
+        let agents: &Vec<Agent> = board.get_agents();
+        for a in agents {
+            println!("Agent: {:?}", a);
+        }
+ 
+        /* make first move */
+        let mut curr_turn = board.get_agent_current_turn(); 
+        assert_eq!(curr_turn.get_piece(), 1);
+        board.make_move((1,1));
+        assert_eq!(board.get_pos(1,1), 1);
+
+        curr_turn = board.get_agent_current_turn();  
+        assert_eq!(curr_turn.get_piece(), 2);
+        board.make_move((0,0));
+        assert_eq!(board.get_pos(0,0), 2);
+
+        curr_turn = board.get_agent_current_turn();  
+        assert_eq!(curr_turn.get_piece(), 1);
+        board.make_move((1,0));
+        assert_eq!(board.get_pos(1,0), 1);
+
+    }
 
     #[test]
-    fn test_board_availability() {}
+    fn test_board_availability() {
+        
+        let mut board: Board = Board::new(3, 3);
+        let mut agent1: Agent = Agent::new(1);
+        let mut agent2: Agent = Agent::new(2);
+
+        /* add agents to board */
+        board.add_agent(agent1);
+        board.add_agent(agent2);
+        agent1.set_score(0);
+        agent2.set_score(0);
+
+        /* iterate through agent list */
+        let agents: &Vec<Agent> = board.get_agents();
+        for a in agents {
+            println!("Agent: {:?}", a);
+        }
+
+        /* make first move */ 
+        board.make_move((1,1));
+        assert_eq!(board.get_pos(1,1), 1);
+        let mut moves  = vec![(0,0), (0,1), (0,2), (1,0), (1,2), (2,0), (2,1), (2,2)];  
+        assert_eq!(moves, board.available_moves());
+
+        board.make_move((0,0));
+        assert_eq!(board.get_pos(0,0), 2);
+        moves  = vec![(0,1), (0,2), (1,0), (1,2), (2,0), (2,1), (2,2)];  
+        assert_eq!(moves, board.available_moves());
+ 
+        board.make_move((1,0));
+        assert_eq!(board.get_pos(1,0), 1);
+        moves  = vec![(0,1), (0,2), (1,2), (2,0), (2,1), (2,2)];  
+        assert_eq!(moves, board.available_moves());
+    }
 }

@@ -153,8 +153,6 @@ pub fn get_available_positions(my_board: &mut Board) -> Vec<(usize, usize)> {
     let rows = my_board.get_cols();
     let cols = my_board.get_rows();
     let col_counter = cols - 1;
-    println!("Board cols: {:?}", cols);
-    println!("Board rows: {:?}", rows);
 
     for _col in 0..col_counter {
         let mut row_counter = (rows - 1) as i32;
@@ -167,7 +165,6 @@ pub fn get_available_positions(my_board: &mut Board) -> Vec<(usize, usize)> {
         }
     }
 
-    println!("My vec: {:?}", position_vec);
 
     position_vec
 }
@@ -177,7 +174,6 @@ pub fn take_random_action(my_board: &mut Board, agent: Agent) {
     let idx = rand::thread_rng().gen_range(0..position_vec.len() - 1);
     let choice = position_vec[idx];
 
-    println!("Choice: {:?} {:?}", choice.0, choice.1);
 
     my_board.place_piece(choice.0, choice.1, agent);
 }

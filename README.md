@@ -19,3 +19,6 @@ This purpose of the engine is to research different machine learning methods for
 7. Scrabble
 8. https://www.improvememory.org/brain-games/puzzle-games/colour-cell/
 9. Chess
+
+## To Do (Fri Nov 17)
+1. Finish of unit tests for board instance
