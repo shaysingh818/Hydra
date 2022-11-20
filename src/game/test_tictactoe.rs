@@ -150,8 +150,7 @@ mod minimax {
             &mut board.clone(), 0, 9, -1000, 1000
         );
 
-        assert_eq!(_best_move1, optimal_move);
-        
+        assert_eq!(_best_move1, optimal_move); 
     }
 
 }
