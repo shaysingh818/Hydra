@@ -34,4 +34,12 @@ pub trait Minimax {
         max_depth: usize
     ) -> (i32, (usize, usize));
 
+    fn ab_negamax( 
+        board: &mut Board, 
+        curr_depth: usize,
+        max_depth: usize,
+        alpha: i32, 
+        beta: i32
+    ) -> (i32, (usize, usize)); 
+
 }

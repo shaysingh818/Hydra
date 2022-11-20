@@ -111,8 +111,47 @@ mod minimax {
             Board::negamax(&mut board.clone(), 0, 9);
 
         assert_eq!(_best_move1, optimal_move);
+    }
 
+    #[test]
+    fn test_ab_negamax() {
 
+        /* set up environment */ 
+        let mut board: Board = Board::new(3, 3);
+        for item in 1..3 {
+            let mut temp_agent : Agent = Agent::new(item); 
+            temp_agent.set_score(0); 
+            board.add_agent(temp_agent); 
+        }
+
+        /* create board configuration */
+        board.make_move((1,1));
+        board.make_move((0,2));
+        board.make_move((1,2));
+
+        /* test negamax function */ 
+        let mut optimal_move = (1, 0); 
+        let (_best_score, _best_move) = Board::ab_negamax(
+            &mut board.clone(), 0, 9, -1000, 1000
+        );
+
+        assert_eq!(_best_move, optimal_move);
+
+        /* testing second board configuration */
+        board.clear(); 
+        board.make_move((0,2));
+        board.make_move((0,0));
+        board.make_move((1,1));
+        board.print_board(); 
+
+        /* test ab negamax function */ 
+        optimal_move = (2, 0); 
+        let (_best_score1, _best_move1) = Board::ab_negamax(
+            &mut board.clone(), 0, 9, -1000, 1000
+        );
+
+        assert_eq!(_best_move1, optimal_move);
+        
     }
 
 }

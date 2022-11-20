@@ -3,6 +3,7 @@ use crate::board::Board;
 use crate::engine::minimax::*;
 use rand::*;
 use std::io;
+use std::cmp; 
 use std::{thread, time};
 
 pub fn diagonals(board: &Board, agent: Agent) -> bool {
@@ -418,6 +419,65 @@ impl Minimax for Board {
 
 
         (best_score, best_move)
+    }
+
+    fn ab_negamax( 
+        board: &mut Board, 
+        curr_depth: usize,
+        max_depth: usize,
+        alpha: i32, 
+        beta: i32
+    ) -> (i32, (usize, usize)) {
+
+        /* if game is over or terminal state is reached stop recursing */
+        let game_over = board.is_full();
+        let curr_agent = board.get_agent_current_turn(); 
+        let winner = determine_winner(board, curr_agent);
+        if game_over || winner { 
+            let score = Self::negmax_eval(board);
+            return (score, (0, 0)); 
+        }
+
+        /* define local vars for function */
+        let mut best_score = -1000;
+        let mut best_move = (0, 0);
+
+        /* go through each available move */
+        for play in board.available_moves() {
+
+            /* make move */ 
+            board.make_move(play);
+
+            /* get alpha value */ 
+            let alpha_value = cmp::max(alpha, best_score); 
+
+            /* recurse to the next state */
+            let (recursed_score, _current_move) = Board::ab_negamax(
+                &mut board.clone(),
+                curr_depth + 1,
+                max_depth,
+                -beta,
+                -alpha_value
+            );
+
+            /* determine best score */ 
+            let current_score = -recursed_score; 
+            if current_score > best_score {
+                best_score = current_score; 
+                best_move = play; 
+            
+                /* if we're outside bounds, prune the tree */
+                if best_score > beta {
+                    return (best_score, best_move); 
+                }
+            }
+
+            /* undo move */ 
+            board.pop_piece(); 
+
+        }
+
+        (best_score, best_move) 
     }
 }
 
