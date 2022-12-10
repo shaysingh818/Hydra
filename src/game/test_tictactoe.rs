@@ -162,7 +162,7 @@ mod game_logic {
 
     use crate::agent::Agent;
     use crate::board::Board;
-    use crate::tictactoe::*;
+    use crate::game::tictactoe::*;
 
     #[test]
     fn test_left_right_diagonal() {

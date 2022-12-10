@@ -4,7 +4,7 @@ mod game_logic {
     /* unit tests for connect 4 environment */
     use crate::agent::Agent;
     use crate::board::Board;
-    use crate::c4::*;
+    use crate::game::c4::*;
 
     #[test]
     fn test_left_right_diagonal() {
