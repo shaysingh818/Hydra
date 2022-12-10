@@ -1,0 +1,182 @@
+<html>
+	<head>
+    	<meta charset="UTF-8">
+    	<title>Hydra: Board Game Engine</title>
+    	<link rel="stylesheet" href="../styles.css">
+		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+  	</head>
+
+    <body>
+
+        <!-- Navigation bar -->
+        <div class="nav-container">
+			<div class="header">Hydra</div>
+			<div class="search-box">
+				<div class="search-text">
+					Search
+				</div>
+			</div>
+			<div class="search-button">
+				<div class="search-button-text">
+					Search
+				</div>
+			</div>
+
+			<div class="nav-items">
+				<p class="nav-item" style="order: 0;"> Home </p>
+				<p class="nav-item" style="order: 1;"> <a href="pages/games.html">Games</a> </p>
+				<p class="nav-item" style="order: 2;"> Settings </p>
+				<p class="nav-item" style="order: 3;"> Documentation </p>
+			</div>
+		</div>
+
+		<!-- Popup form  -->
+		<div class="agent-form-modal" id="agent-form-modal">
+			<div class="agent-form-model-content" id="agent-form">
+				<div class="agent-form">
+					<div class="agent-form-title">Add Agent</div>
+					<div class="agent-form-summary">
+						Adding agents to your current board game environment allows you to experiment with different learning algorithms. Adding too many agents can result in unknown outcomes. 
+					</div>
+					<div class="agent-form-textfield">
+						<div class="agent-form-textfield-hint">Agent Name</div>
+					</div>
+
+					<button class="agent-form-submit" onclick="closeForm()">
+						<div class="agent-form-submit-text">
+							Add Agent
+						</div>
+					</button>
+				</div>
+			</div>
+		</div>
+
+
+
+       <div class="container">
+
+			<!-- Modal container -->
+	
+			<div class="game-settings">
+				<div class="game-settings-title">Tic Tac Toe</div>
+				<div class="game-settings-summary">
+					Tic-tac-toe, noughts and crosses, or Xs and Os is a paper-and-pencil game for two players who take turns marking the spaces in a three-by-three grid with X or O. The player who succeeds in placing three of their marks in a horizontal, vertical, or diagonal row is the winner.
+				</div>
+
+				<div class="game-settings-text-field">
+					<div class="game-settings-text-field-hint">
+						Change board rows
+					</div>
+				</div>
+
+				<div class="game-settings-text-field">
+					<div class="game-settings-text-field-hint">
+						Change board columns
+					</div>
+					
+				</div>
+
+
+				<div class="game-settings-submit-button">
+					<div class="game-settings-button-text">
+						Submit Settings
+					</div>
+				</div>
+				
+			</div>
+
+			<div class="minimax-board" id="minimax-board"></div>
+
+
+			<div class="agent-list">
+				<div class="agent-list-flexbox">
+					<div class="agent-header-box">
+						<div class="agent-list-title">Agent List</div>
+						<div class="agent-list-summary">
+							Agents are AI’s or entites that can be added to the current board state. Agents allow players to experiment with different type of AI’s.
+						</div>
+					</div>
+
+					<button class="agent-list-button" onclick="openForm()">
+						<div class="agent-list-button-text">
+							Add Agent
+						</div>
+					</button>
+
+		
+					<div class="agent-list-tile ">
+						<div class="agent-list-tile-leading"></div>
+						<div class="agent-list-tile-content">
+							<div class="agent-list-tile-title">
+								Minimax Agent
+							</div>
+							<div class="agent-list-tile-subtitle">
+								Created: November 22 2022
+							</div>
+						</div>
+					</div>
+
+					<div class="agent-list-tile ">
+						<div class="agent-list-tile-leading"></div>
+						<div class="agent-list-tile-content">
+							<div class="agent-list-tile-title">
+								Minimax Agent
+							</div>
+							<div class="agent-list-tile-subtitle">
+								Created: November 22 2022
+							</div>
+						</div>
+
+					</div>
+
+					<div class="agent-list-tile ">
+						<div class="agent-list-tile-leading"></div>
+						<div class="agent-list-tile-content">
+							<div class="agent-list-tile-title">
+								Minimax Agent
+							</div>
+							<div class="agent-list-tile-subtitle">
+								Created: November 22 2022
+							</div>
+						</div>
+					</div>
+
+					<div class="agent-list-tile ">
+						<div class="agent-list-tile-leading"></div>
+						<div class="agent-list-tile-content">
+							<div class="agent-list-tile-title">
+								Minimax Agent
+							</div>
+							<div class="agent-list-tile-subtitle">
+								Created: November 22 2022
+							</div>
+						</div>
+
+					</div>
+
+					<div class="agent-list-tile ">
+						<div class="agent-list-tile-leading"></div>
+						<div class="agent-list-tile-content">
+							<div class="agent-list-tile-title">
+								Minimax Agent
+							</div>
+							<div class="agent-list-tile-subtitle">
+								Created: November 22 2022
+							</div>
+						</div>
+
+					</div>
+
+				</div>
+
+			</div>
+
+
+       </div>
+
+	   <script src="../js/minimax.js"></script>
+
+
+    </body>
+
+</html>

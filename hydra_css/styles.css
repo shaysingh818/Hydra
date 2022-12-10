@@ -740,6 +740,72 @@ a {
 	color: #FF650F;
 }
 
+.minimax-board {
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+	padding: 10px;
+	gap: 7px;
+	
+	width: 454px;
+	height: 454px;
+	
+	
+	/* Inside auto layout */
+	flex: none;
+	order: 1;
+	flex-grow: 0;
+}
+
+.minimax-board-row {
+	display: flex;
+	flex-direction: row;
+	justify-content: center;
+	align-items: center;
+	padding: 0px;
+	gap: 7px;
+
+	width: 434px;
+	height: 140px;
+
+
+	/* Inside auto layout */
+	flex: none;
+	order: 0;
+	flex-grow: 0;
+}
+
+.minimax-board-cell {
+	width: 140px;
+	height: 140px;
+
+	/* Inside auto layout */
+	flex: none;
+	order: 0;
+	flex-grow: 1;
+	background: #383232;
+	border-radius: 5px;
+}
+
+.minimax-board-cell-text {
+	position: relative;
+	width: 31px;
+	height: 58px;
+	left: 54px;
+	top: 41px;
+
+	font-family: 'Arial';
+	font-style: normal;
+	font-weight: 400;
+	font-size: 48px;
+	line-height: 58px;
+
+	/* identical to box height */
+	color: #FF650F;
+}
+
+
 
 
 

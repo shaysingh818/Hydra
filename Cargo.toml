@@ -2,8 +2,38 @@
 name = "hydra"
 version = "0.1.0"
 edition = "2021"
+description = "hydra web assembly package"
+license = "MIT/Apache-2.0"
 
+[features]
 
+[lib]
+crate-type = ["cdylib", "rlib"]
 
 [dependencies]
 rand = "0.8"
+wasm-bindgen="0.2.45"
+serde = { version = "1.0.126", features = ["derive"] }
+serde_json = "1.0.64"
+serde-wasm-bindgen = "0.4"
+js-sys = "0.3.59"
+getrandom = { version = "0.2", features = ["js"] }
+wee_alloc = { version = "0.4.2", optional = true }
+
+
+[dependencies.web-sys]
+version = "0.3.22"
+features = ["console"]
+
+
+[target."cfg(debug_assertions)".dependencies]
+console_error_panic_hook = "0.1.5"
+
+# These crates are used for running unit tests.
+[dev-dependencies]
+wasm-bindgen-test = "0.2.45"
+futures = "0.1.27"
+js-sys = "0.3.22"
+wasm-bindgen-futures = "0.3.22"
+                                 
+

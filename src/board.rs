@@ -26,6 +26,10 @@ impl Board {
         &self.matrix
     }
 
+    pub fn set_board(&mut self, new_matrix: Vec<Vec<i32>>) {
+        self.matrix = new_matrix; 
+    }
+
     pub fn get_cols(&self) -> usize {
         self.cols
     }

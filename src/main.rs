@@ -30,7 +30,7 @@ pub fn match_command_arg(game_type: &str, rounds: &String) {
 
         "tic-tac-minimax" => {
             println!("Minimax testing goes here");
-            //minimax::minimax_game_cycle();
+            tictactoe::minimax_game_cycle(rnds);
         }
         _ => {
             println!("No game type selected");
