@@ -1,8 +1,76 @@
-const { BoardState, add } = require('../pkg/hydra.js');
+const express = require('express'); 
+const path = require('path'); 
+const app = express(); 
+const port = 8080; 
+
+/* import rust library */ 
+const { hydra_minimax , add } = require('../pkg/hydra.js');
+//const my_board = BoardState.new(3, 3); 
+
+/* serve static files and allow body parsers */ 
+app.use(express.static('public'));
+app.use(express.urlencoded());
+app.use(express.json());
 
 
-const board = BoardState.new(3, 3);
-console.log(board); 
+/* render home page  */
+app.get('/', function(req, res) {
+  res.sendFile(path.join(__dirname, '/public/html/index.html'));
+});
 
-const result = add(3, 4); 
-console.log(result); 
+
+/* render games page  */
+app.get('/games', function(req, res) {
+  res.sendFile(path.join(__dirname, '/public/html/games.html'));
+});
+
+
+/* render docs page  */
+app.get('/docs', function(req, res) {
+  res.sendFile(path.join(__dirname, '/public/html/documentation.html'));
+});
+
+
+/* render games detail  */
+app.get('/game-detail', function(req, res) {
+  res.sendFile(path.join(__dirname, '/public/html/game_detail.html'));
+});
+
+/* invoke minimax function from hydra  */
+app.post('/tic-tac-toe', function(req, res) {
+
+  	/* Use functions instead of structs for this */
+	let form_data = req.body; 
+	for(let i = 0; i < 3; i++) {
+		console.log(form_data.board_state[i]); 
+	}
+
+	/* pass json parameters to hydra lib */ 
+	let data = {
+		rows: form_data.rows, 
+		cols: form_data.cols, 
+		matrix: form_data.board_state
+	};
+
+	/* retrive result */ 
+	let result = hydra_minimax(data); 
+	console.log(result); 
+
+	/* in the future, this info can be queried from a database */ 
+	res.json({
+		row: result[0], 
+		col: result[1], 
+	}); 
+	
+});
+
+
+/* render games detail  */
+app.get('/minimax', function(req, res) {
+  	res.sendFile(path.join(__dirname, '/public/html/minimax.html'));
+});
+
+
+
+app.listen(port);
+console.log('Server started at http://localhost:' + port);

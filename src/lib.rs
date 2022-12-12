@@ -20,66 +20,45 @@ use crate::engine::minimax::*;
 pub struct BoardState {
     rows: usize, 
     cols: usize,
-    max_size: usize,
-    optimal_move: (u8, u8), 
     matrix: Vec<Vec<i32>>
 }
 
 
+
 #[wasm_bindgen]
-impl BoardState {
+pub fn hydra_minimax(board_state: JsValue) -> JsValue {
 
-    pub fn new(set_rows: usize, set_cols: usize) -> BoardState {
-        BoardState {
-            rows: set_rows, 
-            cols: set_cols, 
-            max_size: 6,
-            optimal_move: (0, 0), 
-            matrix: vec![vec![0; set_rows]; set_cols]
-        }
-    }
+    let board_state: BoardState = serde_wasm_bindgen::from_value(board_state).unwrap();
 
+    /* binding to invoke minimax function from pure rust library */ 
+    let mut board: Board = Board::new(3, 3);
+    let mut agent1: Agent = Agent::new(1);
+    let mut agent2: Agent = Agent::new(2);
 
-    pub fn minimax(&mut self) -> JsValue {
+    /* add agents to board */
+    board.add_agent(agent1);
+    board.add_agent(agent2);
 
-        /* binding to invoke minimax function from pure rust library */ 
-        let mut board: Board = Board::new(3, 3);
-        let mut agent1: Agent = Agent::new(1);
-        let mut agent2: Agent = Agent::new(2);
-
-        /* add agents to board */
-        board.add_agent(agent1);
-        board.add_agent(agent2);
-
-        /* copy web assembly board state to our library */
-        board.set_board(self.matrix.clone()); 
-        println!("Added agents to board");
-
-        /* set scores for agents */ 
-        agent1.set_score(0);
-        agent2.set_score(0);
-
-        /* set player status for all */
-        agent1.set_status(false);
-        agent2.set_status(true);
+    agent1.set_status(false);
+    agent2.set_status(true);
 
 
-        /* call minimax function */
-        let (current_score, current_move) = Board::minimax(
-            &mut board.clone(), 0, 
-            agent1, agent2,
-            (0, 0), true
-        ); 
+    /* copy web assembly board state to our library */
+    let my_board = board_state.matrix;  
+    board.set_board(my_board.clone()); 
+    println!("Added agents to board");
 
-        /* render optimal move to browser */
-        self.optimal_move = (current_move.0 as u8, current_move.1 as u8); 
-        serde_wasm_bindgen::to_value(&self.optimal_move).unwrap()
-    }
 
-    pub fn render(&self) -> JsValue {
-        serde_wasm_bindgen::to_value(&self.matrix).unwrap()
-    }
+    /* call minimax function */
+    let (current_score, current_move) = Board::minimax(
+        &mut board.clone(), 0, 
+        agent1, agent2,
+        (0, 0), true
+    ); 
 
+    /* render optimal move to browser */
+    let optimal_move = (current_move.0 as u8, current_move.1 as u8); 
+    serde_wasm_bindgen::to_value(&optimal_move).unwrap()
 }
 
 

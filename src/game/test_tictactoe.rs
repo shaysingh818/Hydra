@@ -283,6 +283,23 @@ mod game_logic {
 
 
 #[cfg(test)]
+mod wasm_integration {
+
+    use crate::agent::Agent;
+    use crate::board::Board;
+    use crate::game::tictactoe::*;
+
+
+    #[test]
+    fn test_set_board() {
+        
+
+    }
+
+}
+
+
+#[cfg(test)]
 mod board_evaluation {
 
     use crate::agent::Agent;
