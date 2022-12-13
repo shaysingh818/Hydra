@@ -111,44 +111,29 @@ function closeForm() {
 }
 
 async function cellClicked(rows, cols){
-	placePiece(rows, cols, 1);
 
-	/*
+	// place peice for player
+	placePiece(rows, cols, 2);
+	const cell_text_id = "cell-text-" + rows + "-" + cols; 
+    const cell_text = document.getElementById(cell_text_id);
+	cell_text.innerHTML = 2; 
+
+	console.log("CURRENT BOARD STATE"); 
+	printBoard(); 
+
+	/* place piece for agent */ 
 	let result = await minimax();
 	console.log("MOVE" + result); 
-	placePiece(result.row, result.col, 2);
-	*/ 
+	placePiece(result.row, result.col, 1);
+
+	const agent_text_id = "cell-text-" + result.row + "-" + result.col; 
+    const agent_cell_text = document.getElementById(agent_text_id);
+	agent_cell_text.innerHTML = 1; 
+
+	//renderBoard(rows, cols); 
 	printBoard();
-	renderBoard(rows, cols); 
 }
 
-
-function renderBoard(rows, cols){
-
-    let board_cover = document.getElementById("minimax-board");	
-    for(let i = 0; i < rows; i++){
-
-		/* get board row */
-		const board_row_id = "board-row" + i; 
-       	const board_row = document.getElementById(board_row_id);
-
-        for(let j = 0; j < cols; j++){
-
-        	/* get board cell by id */
-			const board_cell_id = "board-cell-" + i + "-" + j;
-            const board_cell = document.getElementById(board_cell_id);
-
-           	/* Get text element by id and change it to current board val */
-			const board_value = board[i][j]; 
-			const cell_text_id = "cell-text-" + i + "-" + j; 
-            const cell_text = document.getElementById(cell_text_id);
-			cell_text.innerHTML = board_value; 
-        }
-
-        /* add to row */
-        board_cover.append(board_row);
-    }
-}
 
 
 function createBoardInterface(rows, cols){

@@ -14,6 +14,23 @@ use crate::board::Board;
 use crate::agent::Agent; 
 use crate::engine::minimax::*;
 
+
+#[wasm_bindgen]
+pub fn add(x: i32, y: i32) -> i32 {
+    x + y
+}
+
+#[wasm_bindgen]
+extern {
+    fn alert(s: &str);
+}
+
+#[wasm_bindgen]
+pub fn greet() {
+    alert("Hello, World!");
+}
+
+
 #[wasm_bindgen]
 #[derive(Debug, Clone)]
 #[derive(Serialize, Deserialize)]
@@ -38,13 +55,13 @@ pub fn hydra_minimax(board_state: JsValue) -> JsValue {
     board.add_agent(agent1);
     board.add_agent(agent2);
 
-    agent1.set_status(false);
-    agent2.set_status(true);
+    agent1.set_status(true);
+    agent2.set_status(false);
 
 
     /* copy web assembly board state to our library */
-    let my_board = board_state.matrix;  
-    board.copy_board_state(my_board.clone()); 
+    let my_board = board_state.matrix; 
+    board.copy_board_state(my_board); 
     println!("Added agents to board");
 
 
@@ -61,17 +78,3 @@ pub fn hydra_minimax(board_state: JsValue) -> JsValue {
 }
 
 
-#[wasm_bindgen]
-pub fn add(x: i32, y: i32) -> i32 {
-    x + y
-}
-
-#[wasm_bindgen]
-extern {
-    fn alert(s: &str);
-}
-
-#[wasm_bindgen]
-pub fn greet() {
-    alert("Hello, World!");
-}
