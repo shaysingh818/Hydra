@@ -41,10 +41,6 @@ app.post('/tic-tac-toe', function(req, res) {
 
   	/* Use functions instead of structs for this */
 	let form_data = req.body; 
-	for(let i = 0; i < 3; i++) {
-		console.log(form_data.board_state[i]); 
-	}
-
 	/* pass json parameters to hydra lib */ 
 	let data = {
 		rows: form_data.rows, 

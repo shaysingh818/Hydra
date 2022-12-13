@@ -24,7 +24,6 @@ pub struct BoardState {
 }
 
 
-
 #[wasm_bindgen]
 pub fn hydra_minimax(board_state: JsValue) -> JsValue {
 
@@ -45,7 +44,7 @@ pub fn hydra_minimax(board_state: JsValue) -> JsValue {
 
     /* copy web assembly board state to our library */
     let my_board = board_state.matrix;  
-    board.set_board(my_board.clone()); 
+    board.copy_board_state(my_board.clone()); 
     println!("Added agents to board");
 
 

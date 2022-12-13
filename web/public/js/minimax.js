@@ -17,6 +17,13 @@ function createBoard(rows, cols) {
 	}
 }
 
+
+function printBoard(){
+	for(let i = 0; i  < rows; i++){
+		console.log(board[i]); 
+	}
+}
+
 function checkDiagonals(piece) {
 
 	let leftRight = true; 
@@ -105,12 +112,46 @@ function closeForm() {
 
 async function cellClicked(rows, cols){
 	placePiece(rows, cols, 1);
+
+	/*
 	let result = await minimax();
 	console.log("MOVE" + result); 
 	placePiece(result.row, result.col, 2);
+	*/ 
+	printBoard();
+	renderBoard(rows, cols); 
 }
 
+
 function renderBoard(rows, cols){
+
+    let board_cover = document.getElementById("minimax-board");	
+    for(let i = 0; i < rows; i++){
+
+		/* get board row */
+		const board_row_id = "board-row" + i; 
+       	const board_row = document.getElementById(board_row_id);
+
+        for(let j = 0; j < cols; j++){
+
+        	/* get board cell by id */
+			const board_cell_id = "board-cell-" + i + "-" + j;
+            const board_cell = document.getElementById(board_cell_id);
+
+           	/* Get text element by id and change it to current board val */
+			const board_value = board[i][j]; 
+			const cell_text_id = "cell-text-" + i + "-" + j; 
+            const cell_text = document.getElementById(cell_text_id);
+			cell_text.innerHTML = board_value; 
+        }
+
+        /* add to row */
+        board_cover.append(board_row);
+    }
+}
+
+
+function createBoardInterface(rows, cols){
 
 	/* find board element */
     let board_cover = document.getElementById("minimax-board");
@@ -120,12 +161,14 @@ function renderBoard(rows, cols){
 		/* append board row element */
        	const board_row = document.createElement("div");
         board_row.classList.add("minimax-board-row");
+		board_row.id = "board-row-" + i; 
 
         for(let j = 0; j < cols; j++){
 
         	/* create board cell with top and left params */
             const board_cell = document.createElement("div");
             board_cell.classList.add("minimax-board-cell");
+			board_cell.id = "board-cell-" + i + "-" + j; 
 
             /* add click listener */
             board_cell.addEventListener("click", function() {
@@ -133,11 +176,12 @@ function renderBoard(rows, cols){
             });
 
 
-           	/* create text element for board cell */
+           	/* create text element for board cell if a piece is placed*/
 			let board_value = board[i][j]; 
             const cell_text = document.createElement("div");
             const text_node = document.createTextNode(board_value);
             cell_text.classList.add("minimax-board-cell-text");
+			cell_text.id = "cell-text-" + i + "-" + j; 
             cell_text.append(text_node);
             board_cell.append(cell_text);
             board_row.append(board_cell);
@@ -170,10 +214,17 @@ async function minimax() {
 }
 
 
+function setup() {
+	createBoard(rows, cols);
+}
 
-createBoard(rows, cols);
-//renderBoard(rows, cols);
-setInterval(renderBoard(rows, cols), 100); 
+async function main() {
+	setup(); 
+	createBoardInterface(rows, cols); 
+}
+
+main(); 
+
 
 
 

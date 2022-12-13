@@ -255,6 +255,40 @@ pub fn game_cycle(_rounds: i32) {
     }
 }
 
+
+pub fn test_copy_board_state() {
+
+    /* grab any two d array */ 
+    let board_state = vec![vec![0,0,1], vec![2,0,2], vec![0,0,0]];
+    println!("BOARD STATE: {:?}", board_state); 
+
+    /* set up board representation */ 
+    let mut board: Board = Board::new(3, 3);
+    let mut agent1: Agent = Agent::new(1);
+    let mut agent2: Agent = Agent::new(2);
+
+    /* add agents to board */
+    board.add_agent(agent1);
+    board.add_agent(agent2);
+
+    /* set agent status */ 
+    agent1.set_status(true);
+    agent2.set_status(false);
+
+    /* copy over board state */
+    board.copy_board_state(board_state); 
+    board.print_board(); 
+
+    /* run minimax algorithm */
+    let (_best_score1, _best_move1) =
+        Board::minimax(&mut board.clone(), 0, agent1, agent2, (0, 0), true);
+
+    println!("BEST MOVE: {:?}", _best_move1); 
+
+
+
+}
+
 impl Minimax for Board {
 
     fn static_evaluation(board: &mut Board, agent: Agent, opp: Agent) -> i32 {

@@ -30,6 +30,23 @@ impl Board {
         self.matrix = new_matrix; 
     }
 
+    pub fn copy_board_state(&mut self, new_matrix: Vec<Vec<i32>>) {
+        /* I don't like the code for this ~ Refactor */ 
+        let mut row_counter = 0; 
+        for row in &new_matrix {
+            let mut col_counter = 0; 
+            for col in row {
+                if *col != 0 {
+                    let pos = (row_counter, col_counter);
+                    let agent = self.find_agent_by_id(*col); 
+                    self.place_piece(row_counter, col_counter, agent); 
+                }
+                col_counter += 1; 
+            }
+            row_counter += 1; 
+        }
+    }
+
     pub fn get_cols(&self) -> usize {
         self.cols
     }
@@ -56,6 +73,15 @@ impl Board {
 
     pub fn get_agent_current_turn(&self) -> Agent {
         self.agents[self.current_turn]
+    }
+
+    pub fn find_agent_by_id(&self, id: i32) -> Agent {
+        for agent in &self.agents {
+            if agent.get_piece() == id {
+                return *agent; 
+            }
+        }
+        self.get_agent_current_turn()
     }
 
     pub fn print_board(&self) {
