@@ -12,7 +12,7 @@ pub mod game;
 
 use crate::board::Board;
 use crate::agent::Agent; 
-use crate::engine::minimax::*;
+use crate::engine::minimax::tictactoe::*;
 
 
 #[wasm_bindgen]
@@ -66,7 +66,7 @@ pub fn hydra_minimax(board_state: JsValue) -> JsValue {
 
 
     /* call minimax function */
-    let (current_score, current_move) = Board::minimax(
+    let (current_score, current_move) = maximizer::minimax(
         &mut board.clone(), 0, 
         agent1, agent2,
         (0, 0), true

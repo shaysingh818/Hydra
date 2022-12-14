@@ -48,13 +48,8 @@ app.post('/tic-tac-toe', function(req, res) {
 		matrix: form_data.board_state
 	};
 
-	for(let i = 0; i < data.matrix.length; i++){
-		console.log(data.matrix[i]); 
-	}
-
 	/* retrive result */ 
 	let result = hydra_minimax(data); 
-	console.log(result); 
 
 	/* in the future, this info can be queried from a database */ 
 	res.json({
