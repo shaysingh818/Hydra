@@ -1,23 +1,101 @@
 
-
 #[cfg(test)]
-mod minimax {
+mod board_eval {
+
+    /* Unit tests for board evaluation functions */
 
     use crate::agent::Agent;
     use crate::board::Board;
-    use crate::engine::minimax::*;
-    use crate::engine::minimax_test::tictactoe::*;
+    use crate::engine::minimax::tictactoe::*;
+
+    #[test]
+    fn test_static_evaluation() {
+
+        let mut board: Board = Board::new(3, 3);
+        let mut agent1: Agent = Agent::new(1);
+        let mut agent2: Agent = Agent::new(2);
+
+        /* add agents to board */
+        board.add_agent(agent1);
+        board.add_agent(agent2);
+        agent1.set_score(0);
+        agent2.set_score(0);
+
+        let agents: &Vec<Agent> = board.get_agents();
+        for a in agents {
+            println!("Agent: {:?}", a);
+        }
+
+        /* place board configuration state */ 
+        board.place_piece(0, 0, agent1);
+        board.place_piece(0, 1, agent1);
+        board.place_piece(0, 2, agent2);
+
+        /* generate score */ 
+        let mut score = evaluation::static_evaluation(&mut board, agent1, agent2); 
+        assert_eq!(score, 0);
+
+        /* create board config with winner score */ 
+        board.clear(); 
+        board.place_piece(0, 0, agent1);
+        board.place_piece(0, 1, agent2);
+        board.place_piece(1, 1, agent1);
+        board.place_piece(0, 2, agent2); 
+        board.place_piece(2, 2, agent1);
+
+        score = evaluation::static_evaluation(&mut board, agent1, agent2);  
+        assert_eq!(score, 10);
+    } 
+
+
+    #[test]
+    fn test_negmax_eval() {
+        
+        let mut board: Board = Board::new(3, 3);
+        let mut agent1: Agent = Agent::new(1);
+        let mut agent2: Agent = Agent::new(2);
+
+        /* add agents to board */
+        board.add_agent(agent1);
+        board.add_agent(agent2);
+        agent1.set_score(0);
+        agent2.set_score(0);
+
+        let agents: &Vec<Agent> = board.get_agents();
+        for a in agents {
+            println!("Agent: {:?}", a);
+        }
+
+        /* create board configuration with make move */ 
+        board.make_move((0,0));
+        board.make_move((0,1));
+        board.make_move((1,1));
+        board.make_move((0,2));
+        board.make_move((2,2));
+        board.make_move((2,0));
+
+        let score = evaluation::negmax_eval(&mut board); 
+        assert_eq!(score, 10);
+    } 
+}
+
+
+#[cfg(test)]
+mod test_minimax {
+
+    /*
+    : For this set of tests, the logic for creating board
+    configurations can be more modular by looping through
+    a set of existing stored configurations.
+    */
+
+    use crate::agent::Agent;
+    use crate::board::Board;
+    use crate::engine::minimax::tictactoe::*;
 
 
     #[test]
     fn test_minimax() {
-        /*
-
-        : For this set of tests, the logic for creating board
-          configurations can be more modular by looping through
-          a set of existing stored configurations.
-
-        */
 
         let mut board: Board = Board::new(3, 3);
         let mut agent1: Agent = Agent::new(1);
@@ -70,7 +148,7 @@ mod minimax {
 
         /* call minimax with second configuration */
         let (_best_score2, _best_move2) =
-            Board::minimax(&mut board.clone(), 0, agent1, agent2, (0, 0), true);
+            maximizer::minimax(&mut board.clone(), 0, agent1, agent2, (0, 0), true);
 
         optimal_move = (0, 0);
         assert_eq!(_best_move2, optimal_move);

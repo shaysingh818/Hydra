@@ -3,7 +3,7 @@ use std::cmp;
 use crate::agent::Agent; 
 use crate::board::Board; 
 use crate::game::tictactoe::*; 
-use crate::engine::minimax_test::tictactoe::*; 
+use crate::engine::minimax::tictactoe::*; 
 
 
 
