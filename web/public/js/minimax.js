@@ -139,7 +139,7 @@ class TicTacToeBoard {
 			board_state: this.matrix
 		}; 
 
-		const response = await fetch("http://localhost:8080/minimax", {
+		const response = await fetch("http://localhost:8080/tictactoe/minimax", {
 			method: "POST",
 			headers: {
 				'Content-Type': 'application/json'
