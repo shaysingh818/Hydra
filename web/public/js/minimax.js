@@ -1,154 +1,213 @@
 
-/* global vars */ 
+
 const playerTurn = true; 
 const gameOver = false;
 const rows = 3; 
 const cols = 3; 
 
-let board = []; 
 
-function createBoard(rows, cols) {
-	for(let i = 0; i  < rows; i++){
-		let temp = [] 
-		for(let j = 0; j < cols; j++){
-			temp.push(0); 
-		}
-		board.push(temp); 
-	}
-}
-
-
-function printBoard(){
-	for(let i = 0; i  < rows; i++){
-		console.log(board[i]); 
-	}
-}
-
-function checkDiagonals(piece) {
-
-	let leftRight = true; 
-	let rightLeft = true; 
-	let rowCount = board.length - 1; 
-	let colCount = 0; 
+class TicTacToeBoard {
 	
-	for(let i = 0; i < rows; i++){
+	constructor(set_rows, set_cols) {
+		this.rows = set_rows; 
+		this.cols = set_cols; 
+		this.matrix = [] 
 
-		if(board[colCount][rowCount] != piece){
-			leftRight = false; 
+		/* create matrix */
+		for(let i = 0; i  < rows; i++){
+			let temp = [] 
+			for(let j = 0; j < cols; j++){
+				temp.push(0); 
+			}
+			this.matrix.push(temp); 
 		}
-	
-		if(board[colCount][colCount] != piece){
-			leftRight = false; 
-		}
-
-		colCount += 1; 
-		rowCount -= 1; 
 	}
 
-	if(leftRight == true || rightLeft == true) {
-		return true; 
+	rows() {
+		return this.rows; 
 	}
 
-	return false; 
-}
+	cols() {
+		return this.cols; 
+	}
 
+	printMatrix() {
+		for(let i = 0; i  < rows; i++){
+			console.log(this.matrix[i]); 
+		}
+	}
 
-function checkVerticals(piece) {
+	placePiece(setRow, setCol, piece) {
+		let value = this.matrix[setRow][setCol];
+		if(value == 0){
+			this.matrix[setRow][setCol] = piece; 
+		} else {
+			alert("Position already taken"); 
+		}
+	}
 
-	let horiz = true; 
-	let vert = true; 
-	let rowIndex = 0; 
-	let colIndex = 0; 
+	checkDiagonals(piece) {
+
+		let leftRight = true; 
+		let rightLeft = true; 
+		let rowCount = this.matrix.length - 1; 
+		let colCount = 0; 
 	
-	for(let i = 0; i < rows; i++){
+		for(let i = 0; i < rows; i++){
 
-		let tempHoriz = true; 
-		let tempVert = true; 
+			let leftRightVal = this.matrix[colCount][rowCount]; 
+			let rightLeftVal = this.matrix[colCount][colCount];
 
-		for(let j = 0; j < cols; j++){
-
-			let value = board[i][j]; 
-			if(value != piece){
-				tempHoriz = false; 
+			if(leftRightVal !== piece) {
+				leftRight = false; 
 			}
 
-			if(board[colIndex][rowIndex] != piece){
-				tempVert = false; 
+			if(rightLeftVal !== piece){
+				rightLeft = false; 
 			}
-			colIndex += 1;
+
+			colCount += 1; 
+			rowCount -= 1; 	
 		}
 
-		if(tempHoriz == true) {
-			horiz = true; 
-		}
-	
-		if(tempVert == true) {
-			vert = true; 
+		console.log("RIGHT LEFT: " + rightLeft); 
+		console.log("LEFT RIGHT: " + leftRight);
+
+		if(rightLeft == true || leftRight == true){
+			return true; 
 		}
 
-		rowIndex += 1; 
-		colIndex += 1; 
+		return false; 
 	}
 
-	if(horiz == true || vert == true) {
-		return true; 
-	}
+
+	checkVerticals(piece) {
+
+		let horiz = false; 
+		let vert = false; 
+		let rowIndex = 0; 
+		let colIndex = 0; 
 	
-	return false; 
+		for(let i = 0; i < rows; i++){
+
+			let tempHoriz = true; 
+			let tempVert = true; 
+
+			for(let j = 0; j < cols; j++){
+
+				let value = this.matrix[i][j]; 
+				if(value != piece){
+					tempHoriz = false; 
+				}
+
+				let vert_value = this.matrix[colIndex][rowIndex]; 
+				if(vert_value != piece){
+					tempVert = false; 
+				}
+				colIndex += 1;
+			}
+
+			if(tempHoriz === true || tempVert === true) {
+
+				if(tempHoriz == true) {
+					horiz = true; 
+				}
+	
+				if(tempVert == true) {
+					vert = true; 
+				}
+				break; 
+			}
+
+
+			rowIndex += 1; 
+			colIndex = 0; 
+		}	
+
+		if(horiz == true || vert == true) {
+			return true; 
+		}
+	
+		return false; 
+	}
+
+	async minimax() {
+
+		let data = {
+			rows: 3, 
+			cols: 3, 
+			board_state: this.matrix
+		}; 
+
+		const response = await fetch("http://localhost:8080/minimax", {
+			method: "POST",
+			headers: {
+				'Content-Type': 'application/json'
+			},
+			body: JSON.stringify(data)
+		}); 
+	
+		return response.json(); 
+	}
 
 }
 
-function placePiece(setRow, setCol, piece){
-	board[setRow][setCol] = piece; 
-}
 
-function openForm() {
-    document.getElementById("agent-form-modal").style.display = "block";
-}
-
-function closeForm() {
-    document.getElementById("agent-form-modal").style.display = "none";
-}
-
-async function cellClicked(rows, cols){
+async function cellClicked(board_state, rows, cols){
 
 	// place peice for player
-	placePiece(rows, cols, 2);
+	board_state.placePiece(rows, cols, 2);
 	const cell_text_id = "cell-text-" + rows + "-" + cols; 
     const cell_text = document.getElementById(cell_text_id);
 	cell_text.innerHTML = 2; 
 
 	console.log("CURRENT BOARD STATE"); 
-	printBoard(); 
+	board_state.printMatrix();
+
+	let player_diag = board_state.checkDiagonals(2); 
+	let player_vert = board_state.checkVerticals(2);
+
+	if(player_diag === true || player_vert === true){
+		alert("YOU WIN!");
+		alert("Export your board state for prizes!"); 
+	} 
 
 	/* place piece for agent */ 
-	let result = await minimax();
+	let result = await board_state.minimax();
 	console.log("MOVE" + result); 
-	placePiece(result.row, result.col, 1);
+	board_state.placePiece(result.row, result.col, 1);
 
 	const agent_text_id = "cell-text-" + result.row + "-" + result.col; 
     const agent_cell_text = document.getElementById(agent_text_id);
 	agent_cell_text.innerHTML = 1; 
+	board_state.printMatrix();
 
-	//renderBoard(rows, cols); 
-	printBoard();
+
+	let agent_diag = board_state.checkDiagonals(1); 
+	let agent_vert = board_state.checkVerticals(1);
+
+	if(agent_diag === true || agent_vert === true){
+		console.log("VERT HORIZ: " + agent_vert);
+		console.log("DIAG: " + agent_diag); 
+		alert("AGENT HAS WON!"); 
+	} 
 }
 
 
 
-function createBoardInterface(rows, cols){
+function createBoardInterface(board_state){
 
 	/* find board element */
     let board_cover = document.getElementById("minimax-board");
 
-    for(let i = 0; i < rows; i++){
+    for(let i = 0; i < board_state.rows; i++){
 
 		/* append board row element */
        	const board_row = document.createElement("div");
         board_row.classList.add("minimax-board-row");
 		board_row.id = "board-row-" + i; 
 
-        for(let j = 0; j < cols; j++){
+        for(let j = 0; j < board_state.cols; j++){
 
         	/* create board cell with top and left params */
             const board_cell = document.createElement("div");
@@ -157,12 +216,12 @@ function createBoardInterface(rows, cols){
 
             /* add click listener */
             board_cell.addEventListener("click", function() {
-            	cellClicked(i, j);
+            	cellClicked(board_state, i, j);
             });
 
 
            	/* create text element for board cell if a piece is placed*/
-			let board_value = board[i][j]; 
+			let board_value = board_state.matrix[i][j]; 
             const cell_text = document.createElement("div");
             const text_node = document.createTextNode(board_value);
             cell_text.classList.add("minimax-board-cell-text");
@@ -178,34 +237,21 @@ function createBoardInterface(rows, cols){
 }
 
 
-async function minimax() {
-
-	let data = {
-		rows: 3, 
-		cols: 3, 
-		board_state: board
-	}; 
-
-	const response = await fetch("http://localhost:8080/tic-tac-toe", {
-		method: "POST",
-		headers: {
-			'Content-Type': 'application/json'
-		},
-		body: JSON.stringify(data)
-	}); 
-	
-	return response.json(); 
-
+function openForm() {
+    document.getElementById("agent-form-modal").style.display = "block";
 }
 
-
-function setup() {
-	createBoard(rows, cols);
+function closeForm() {
+    document.getElementById("agent-form-modal").style.display = "none";
 }
+
 
 async function main() {
-	setup(); 
-	createBoardInterface(rows, cols); 
+
+	/* create board object */ 
+	let my_board = new TicTacToeBoard(rows, cols); 
+	my_board.printMatrix();
+	createBoardInterface(my_board); 
 }
 
 main(); 

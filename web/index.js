@@ -37,7 +37,7 @@ app.get('/game-detail', function(req, res) {
 });
 
 /* invoke minimax function from hydra  */
-app.post('/tic-tac-toe', function(req, res) {
+app.post('/minimax', function(req, res) {
 
   	/* Use functions instead of structs for this */
 	let form_data = req.body; 
@@ -61,7 +61,7 @@ app.post('/tic-tac-toe', function(req, res) {
 
 
 /* render games detail  */
-app.get('/minimax', function(req, res) {
+app.get('/tic-tac-toe', function(req, res) {
   	res.sendFile(path.join(__dirname, '/public/html/minimax.html'));
 });
 

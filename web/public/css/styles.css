@@ -112,7 +112,7 @@ a {
 	font-style: normal;
 	font-weight: 400;
 	font-size: 15px;
-	line-height: 35px;
+	line-height: 40px;
 
 	color: #FFFFFF;
 	display: flex;
@@ -663,7 +663,7 @@ a {
 	font-style: normal;
 	font-weight: 400;
 	font-size: 18px;
-	line-height: 22px;
+	line-height: 20px;
 	left: 40px; 
 	top: 10px; 
 
@@ -918,9 +918,9 @@ a {
 
 .agent-list-button-text {
 	position: relative;
-	width: 81px;
+	width: 95px;
 	height: 19px;
-	left: 74px;
+	left: 65px;
 	top: 1px;
 
 	font-family: 'Arial';
