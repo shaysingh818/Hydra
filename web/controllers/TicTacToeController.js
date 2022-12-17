@@ -17,9 +17,6 @@ class TicTacToeController {
 		/* retrive result */ 
 		let result = hydra_minimax(data);
 
-		/* confirm this is working */ 
-		console.log("controller is working minimax"); 
-
 		/* in the future, this info can be queried from a database */ 
 		res.json({
 			row: result[0], 
@@ -27,9 +24,7 @@ class TicTacToeController {
 		}); 
 	}
 
-
 	ttt_game(req, res) {
-		console.log("Controller is working main page ttt"); 
 		res.render('minimax'); 
 	}
 }

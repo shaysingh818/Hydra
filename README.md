@@ -13,6 +13,11 @@ wasm-pack build --target nodejs
 node index.js
 ```
 
+## Sync Database Schema
+Refer to ```create_user.sql``` for creating DB users
+```
+mysql -u hydra_admin -p < db.sql
+```
 
 ## Testing the Rust Library
 ```
