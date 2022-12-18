@@ -1,4 +1,4 @@
-const { hydra_minimax , add } = require('../../pkg/hydra.js');
+const { hydra_minimax, add } = require("../../pkg/hydra.js");
 
 
 class TicTacToeController {
@@ -30,4 +30,4 @@ class TicTacToeController {
 }
 
 
-module.exports = TicTacToeController; 
+module.exports =  TicTacToeController; 

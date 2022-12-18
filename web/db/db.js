@@ -1,4 +1,4 @@
-var mysql = require('mysql');
+const mysql = require('mysql');
 
 var db_config = {
     host     : '127.0.0.1', 
@@ -35,4 +35,4 @@ function handleDisconnect() {
 }
 
 handleDisconnect();
-module.exports = connection;
+module.export = connection;

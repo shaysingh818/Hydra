@@ -32,7 +32,7 @@ CREATE TABLE GAME (
     plays INT,
     favorites INT,
     date_created DATETIME DEFAULT NULL,
-    settings INT,
+    settings INT NOT NULL,
     FOREIGN KEY(settings) REFERENCES SETTINGS(settings_id)
 );
 

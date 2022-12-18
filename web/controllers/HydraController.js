@@ -13,5 +13,4 @@ class HydraController {
 
 }
 
-
-module.exports = HydraController; 
+module.exports =  HydraController; 

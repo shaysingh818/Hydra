@@ -1,5 +1,9 @@
-const express = require('express'); 
-const path = require('path'); 
+const express = require('express');
+const hydra = require('./routes/hydra');
+const games = require('./routes/games'); 
+const models = require('./routes/models'); 
+const tictactoe = require('./routes/tic_tac_toe'); 
+
 const app = express(); 
 const port = 8080; 
 
@@ -10,16 +14,14 @@ app.use(express.json());
 app.set('view engine', 'ejs');
 
 /* routing */ 
-const hydra = require("./routes/hydra"); 
 app.get("/", (req, res) => res.render("index"));
 app.use("/hydra", hydra);
-
-const tic_tac_toe = require("./routes/tic_tac_toe"); 
-app.use("/tictactoe", tic_tac_toe); 
-
-const games = require("./routes/games"); 
 app.use("/games", games); 
+app.use("/models", models); 
+app.use("/tictactoe", tictactoe); 
 
 
-app.listen(port);
-console.log('Server started at http://localhost:' + port);
+app.listen(port, () => {
+  console.log(`Example app listening at http://localhost:${port}`)
+  //swaggerDocs(app, port)
+})
