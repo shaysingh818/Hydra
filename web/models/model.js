@@ -85,3 +85,12 @@ deleteModel = (id) => new Promise((resolve, reject) => {
 		}
 	})
 }); 
+
+
+module.exports = {
+	createModel,
+    updateModel, 
+    viewModels,
+    viewModel,
+    deleteGame
+}

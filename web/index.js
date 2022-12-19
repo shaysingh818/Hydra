@@ -1,8 +1,11 @@
 const express = require('express');
+
+/* routes */ 
 const hydra = require('./routes/hydra');
 const games = require('./routes/games'); 
 const models = require('./routes/models'); 
-const tictactoe = require('./routes/tic_tac_toe'); 
+const tictactoe = require('./routes/tic_tac_toe');
+
 
 const app = express(); 
 const port = 8080; 
@@ -21,7 +24,12 @@ app.use("/models", models);
 app.use("/tictactoe", tictactoe); 
 
 
+
+
+
+
 app.listen(port, () => {
-  console.log(`Example app listening at http://localhost:${port}`)
-  //swaggerDocs(app, port)
+
+  	/* use swagger */
+    console.log(`Example app listening at http://localhost:${port}`)
 })

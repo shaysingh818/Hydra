@@ -1,31 +1,32 @@
-import swaggerJsdoc from 'swagger-jsdoc'
-import swaggerUi from 'swagger-ui-express'
 
 const options = {
   definition: {
-    openapi: '3.0.0',
+    openapi: "3.0.0",
     info: {
-      title: 'Hydra API',
-      description: 'Documentation for the Hydra API ',
-      version: '1.0.0',
+      title: "Hydra API",
+      version: "0.1.0",
+      description:
+        "This is a simple CRUD API application made with Express and documented with Swagger",
+      license: {
+        name: "MIT",
+        url: "https://spdx.org/licenses/MIT.html",
+      },
+      contact: {
+        name: "LogRocket",
+        url: "https://logrocket.com",
+        email: "info@email.com",
+      },
     },
+    servers: [
+      {
+        url: "http://localhost:3000/games",
+      },
+    ],
   },
-  // looks for configuration in specified directories
-  apis: ['./routes/*.js'],
-}
+  apis: ["./routes/*.js"],
+};
 
-const swaggerSpec = swaggerJsdoc(options)
 
-function swaggerDocs(app, port) {
-  // Swagger Page
-  app.use('/docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec))
 
-  // Documentation in JSON format
-  app.get('/docs.json', (req, res) => {
-    res.setHeader('Content-Type', 'application/json')
-    res.send(swaggerSpec)
-  })
-}
-
-export default swaggerDocs
+module.exports =  options
 

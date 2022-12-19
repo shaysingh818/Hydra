@@ -11,13 +11,17 @@ createGame = (data) => new Promise((resolve, reject) => {
 
 	var dbQuery = 'INSERT INTO SETTINGS SET ?';
 	var gameQuery = 'INSERT INTO GAME SET ?'; 
-
+	
 	db.query(dbQuery, settingsData, function(err, results, fields){
 		if(err) {
-			console.log(err); 
 			reject(); 
+			console.log(err); 
+
 		} else {
 			resolve(settingsData);
+			console.log(settingsData); 
+			console.log(results);
+
 
 			/* create game model */
 			data.settings = results.insertId; 
@@ -208,3 +212,15 @@ addModel = (id, data) => new Promise((resolve, reject) => {
 	console.log(data); 
 }); 
 
+module.exports = {
+	createGame,
+    updateGame, 
+    viewGames,
+    viewGame,
+    deleteGame,
+	createSetting,
+    updateSetting, 
+    viewSettings,
+    viewSetting,
+    deleteSetting
+}
