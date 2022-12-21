@@ -8,9 +8,14 @@ wasm-pack build --target nodejs
 ```
 
 
-## Run web server
+## Install NPM Modules
 ```
-node index.js
+npm install
+```
+
+## Run Server
+```
+npm start
 ```
 
 ## Sync Database Schema
@@ -25,7 +30,7 @@ cargo test
 ```
 
 
-## Run Unit Tests
+## Expected Unit Test Results
 ```
 running 25 tests
 test board::board_instance::test_agent_turn_cycle ... ok
