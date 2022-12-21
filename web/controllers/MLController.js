@@ -22,11 +22,21 @@ class MLController {
           row: result[0], 
           col: result[1], 
       }); 
-  }
+    }
 
 	/* documentation page */ 
+    negamax(req, res) {
+        res.json({
+            row: 0, 
+            col: 0, 
+        }); 
+	}
+
 	tttAbNegamax(req, res) {
-		res.render("documentation"); 
+        res.json({
+            row: 0, 
+            col: 0, 
+        }); 
 	}
 
 	

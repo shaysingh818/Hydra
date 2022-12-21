@@ -40,7 +40,7 @@ updateUser = (id, data) => new Promise((resolve, reject) => {
 }); 
 
 
-viewUser = () => new Promise((resolve, reject) => {
+viewUsers = () => new Promise((resolve, reject) => {
 
 	console.log("View Games");
 	var dbQuery = 'SELECT * FROM USER'; 
@@ -87,10 +87,52 @@ deleteUser = (id) => new Promise((resolve, reject) => {
 	})
 });
 
+assignEntitlement = (id, data) => new Promise((resolve, reject) => {
+
+	console.log("Check data: " + id);
+	var insert = {
+		user: id,
+		entitlement: data.entitlement_id
+	}; 
+
+	var dbQuery = "INSERT INTO USER_ENTITLEMENT SET ?"; 
+	console.log(dbQuery); 
+
+	db.query(dbQuery, insert, function(err, results, fields){
+		if(err) {
+			console.log(err); 
+			reject(); 
+		} else {
+			resolve(results); 
+		}
+	})
+	console.log("Add entitlement to game"); 
+	console.log(data); 
+}); 
+
+
+viewUserEntitlements = (id) => new Promise((resolve, reject) => {
+
+	console.log("Check data: " + id);
+	var dbQuery = "SELECT * FROM USER_ENTITLEMENT WHERE user = ?"; 
+
+	db.query(dbQuery, id, function(err, results, fields){
+		if(err) {
+			console.log(err); 
+			reject(); 
+		} else {
+			resolve(results); 
+		}
+	})
+}); 
+
+
 module.exports = {
     createUser,
     updateUser, 
     viewUsers,
     viewUser,
-    deleteUser
+    deleteUser,
+	assignEntitlement,
+	viewUserEntitlements
 }

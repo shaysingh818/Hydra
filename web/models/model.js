@@ -1,6 +1,7 @@
 const db = require('../db/db'); 
 
 
+
 createModel = (data) => new Promise((resolve, reject) => {
 
 	console.log("Check data");
@@ -87,10 +88,12 @@ deleteModel = (id) => new Promise((resolve, reject) => {
 }); 
 
 
+
+
 module.exports = {
 	createModel,
     updateModel, 
     viewModels,
     viewModel,
-    deleteGame
+    deleteGame,
 }

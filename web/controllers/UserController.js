@@ -1,16 +1,17 @@
 const {
     createUser,
     updateUser,
-    viewUser,
+    viewUsers,
     viewUser,
     deleteUser,
+    assignEntitlement, 
+    viewUserEntitlements
 } = require('../models/user');
 
 
 class UserController {
 
     createUser(req, res) {
-        console.log("Create Model");
         createUser(req.body).then((result) => {
             return res.send({message: "Inserted Game"});
         }).catch((e) => {
@@ -19,16 +20,14 @@ class UserController {
     }
 
     viewUser(req, res) {
-        console.log("View model goes here");
         viewUser(req.params.id).then((result) => {
-            return res.send({message: result});
+            return res.send(result[0]);
         }).catch((e) => {
             return res.status(400).send(e);
         });
     }
 
     viewUsers(req, res) {
-        console.log("View models goes here");
         viewUsers().then((result) => {
             return res.send({message: result});
         }).catch((e) => {
@@ -37,7 +36,6 @@ class UserController {
     }
 
     updateUser(req, res) {
-        console.log("Update model goes here");
         updateUser(req.params.id, req.body).then((result) => {
             return res.send({message: "Inserted Game"});
         }).catch((e) => {
@@ -46,13 +44,28 @@ class UserController {
 	}
 
 	deleteUser(req, res) {
-        console.log("Delete model goes here");
         deleteUser(req.params.id).then((result) => {
             return res.send({message: "Deleted Game"});
         }).catch((e) => {
             return res.status(400).send(e);
         });
     }
+
+    assignEntitlement(req, res) {
+		assignEntitlement(req.params.id, req.body).then((result) => {
+			return res.send({message: "Added entitlement to game"}); 
+		}).catch((e) => {
+			return res.status(400).send(e); 
+		}); 
+	} 
+
+	viewUserEntitlements(req, res) {
+		viewUserEntitlements(req.params.id).then((result) => {	
+			return res.send(result); 
+		}).catch((e) => {
+			return res.status(400).send(e); 
+		}); 
+	} 
 
 }
 

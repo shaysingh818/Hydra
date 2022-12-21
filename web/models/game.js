@@ -193,12 +193,16 @@ deleteSetting = (id) => new Promise((resolve, reject) => {
 }); 
 
 
-addModel = (id, data) => new Promise((resolve, reject) => {
+assignModel = (id, data) => new Promise((resolve, reject) => {
 
 	console.log("Check data: " + id);
-	var insert = [data,  id];
+	var insert = {
+		game: id,
+		model: data.model_id
+	}; 
 
 	var dbQuery = "INSERT INTO GAME_MODEL SET ?"; 
+	console.log(dbQuery); 
 
 	db.query(dbQuery, insert, function(err, results, fields){
 		if(err) {
@@ -212,6 +216,65 @@ addModel = (id, data) => new Promise((resolve, reject) => {
 	console.log(data); 
 }); 
 
+
+viewGameModels = (id) => new Promise((resolve, reject) => {
+
+	console.log("Check data: " + id);
+	var dbQuery = "SELECT * FROM GAME_MODEL WHERE game = ?"; 
+
+	db.query(dbQuery, id, function(err, results, fields){
+		if(err) {
+			console.log(err); 
+			reject(); 
+		} else {
+			resolve(results); 
+		}
+	})
+}); 
+
+
+assignEntitlement = (id, data) => new Promise((resolve, reject) => {
+
+	console.log("Check data: " + id);
+	var insert = {
+		game: id,
+		entitlement: data.entitlement_id
+	}; 
+
+	var dbQuery = "INSERT INTO GAME_ENTITLEMENT SET ?"; 
+	console.log(dbQuery); 
+
+	db.query(dbQuery, insert, function(err, results, fields){
+		if(err) {
+			console.log(err); 
+			reject(); 
+		} else {
+			resolve(results); 
+		}
+	})
+	console.log("Add entitlement to game"); 
+	console.log(data); 
+}); 
+
+
+viewGameEntitlements = (id) => new Promise((resolve, reject) => {
+
+	console.log("Check data: " + id);
+	var dbQuery = "SELECT * FROM GAME_ENTITLEMENT WHERE game = ?"; 
+
+	db.query(dbQuery, id, function(err, results, fields){
+		if(err) {
+			console.log(err); 
+			reject(); 
+		} else {
+			resolve(results); 
+		}
+	})
+}); 
+
+
+
+
 module.exports = {
 	createGame,
     updateGame, 
@@ -222,5 +285,9 @@ module.exports = {
     updateSetting, 
     viewSettings,
     viewSetting,
-    deleteSetting
+    deleteSetting,
+	assignModel,
+	viewGameModels,
+	assignEntitlement, 
+	viewGameEntitlements
 }

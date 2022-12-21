@@ -9,13 +9,16 @@ const {
 	viewSetting,
 	updateSetting,
 	deleteSetting,
+	assignModel,
+	viewGameModels,
+	assignEntitlement, 
+	viewGameEntitlements
 } = require('../models/game'); 
 
 
 class GamesController {
 
 	createGame(req, res) {
-		console.log("Create game goes here");
 		createGame(req.body).then((result) => {
 			return res.send({message: "Inserted Game"}); 
 		}).catch((e) => {
@@ -24,16 +27,14 @@ class GamesController {
 	}
 
 	viewGame(req, res) {
-		console.log("View game goes here");
 		viewGame(req.params.id).then((result) => {
-			return res.send(result); 
+			return res.send(result[0]); 
 		}).catch((e) => {
 			return res.status(400).send(e); 
 		}); 
 	}
 
 	viewGames(req, res) {
-		console.log("View games goes here");
 		viewGames().then((result) => {
 			return res.send({message: result}); 
 		}).catch((e) => {
@@ -42,7 +43,6 @@ class GamesController {
 	}
 
 	updateGame(req, res) {
-		console.log("create settings goes here");
 		updateGame(req.params.id, req.body).then((result) => {
 			return res.send({message: "Inserted Game"}); 
 		}).catch((e) => {
@@ -51,7 +51,6 @@ class GamesController {
 	}
 
 	deleteGame(req, res) {
-		console.log("create settings goes here");
 		deleteGame(req.params.id).then((result) => {
 			return res.send({message: "Deleted Game"}); 
 		}).catch((e) => {
@@ -60,7 +59,6 @@ class GamesController {
 	}
 
 	createSetting(req, res) {
-		console.log("create settings goes here");
 		createSetting(req.body).then((result) => {
 			return res.send({message: "Inserted settings"}); 
 		}).catch((e) => {
@@ -70,7 +68,7 @@ class GamesController {
 
 	viewSettings(req, res) {
 		viewSettings().then((result) => {
-			return res.send({message: result}); 
+			return res.send(result); 
 		}).catch((e) => {
 			return res.status(400).send(e); 
 		}); 
@@ -78,14 +76,13 @@ class GamesController {
 
 	viewSetting(req, res) {
 		viewSetting(req.params.id).then((result) => {
-			return res.send(result); 
+			return res.send(result[0]); 
 		}).catch((e) => {
 			return res.status(400).send(e); 
 		}); 
 	}
 
 	updateSetting(req, res) {
-		console.log("DO YOU WORK?");
 		updateSetting(req.params.id, req.body).then((result) => {
 			return res.send({message: "Updated settings"}); 
 		}).catch((e) => {
@@ -94,7 +91,6 @@ class GamesController {
 	}
 
 	deleteSetting(req, res) {
-		console.log("DO YOU WORK?");
 		deleteSetting(req.params.id).then((result) => {
 			return res.send({message: "Deleted setting"}); 
 		}).catch((e) => {
@@ -102,15 +98,37 @@ class GamesController {
 		}); 
 	}
 
-	/*
-	addModel(req, res) {
-		console.log("DO YOU WORK?");
-		addModel(req.params.id).then((result) => {
+	assignModel(req, res) {
+		assignModel(req.params.id, req.body).then((result) => {
 			return res.send({message: "Added Model"}); 
 		}).catch((e) => {
 			return res.status(400).send(e); 
 		}); 
-	} */
+	} 
+
+	viewGameModels(req, res) {
+		viewGameModels(req.params.id).then((result) => {	
+			return res.send(result); 
+		}).catch((e) => {
+			return res.status(400).send(e); 
+		}); 
+	} 
+
+	assignEntitlement(req, res) {
+		assignEntitlement(req.params.id, req.body).then((result) => {
+			return res.send({message: "Added entitlement to game"}); 
+		}).catch((e) => {
+			return res.status(400).send(e); 
+		}); 
+	} 
+
+	viewGameEntitlements(req, res) {
+		viewGameEntitlements(req.params.id).then((result) => {	
+			return res.send(result); 
+		}).catch((e) => {
+			return res.status(400).send(e); 
+		}); 
+	} 
 
 }
 

@@ -7,7 +7,7 @@ CREATE TABLE USER (
     email VARCHAR(255),
     first_name VARCHAR(255),
     last_name VARCHAR(255),
-    date_created DATETIME DEFAULT NULL
+    date_created DATETIME DEFAULT CURRENT_TIMESTAMP
 );
 
 
@@ -21,7 +21,7 @@ CREATE TABLE SETTINGS (
 CREATE TABLE ENTITLEMENT (
     entitlement_id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
     name VARCHAR(255),
-    date_created DATETIME DEFAULT NULL
+    date_created DATETIME DEFAULT CURRENT_TIMESTAMP
 );
 
 CREATE TABLE GAME (
@@ -31,9 +31,9 @@ CREATE TABLE GAME (
     deployment_route VARCHAR(255),
     plays INT,
     favorites INT,
-    date_created DATETIME DEFAULT NULL,
     settings INT NOT NULL,
-    FOREIGN KEY(settings) REFERENCES SETTINGS(settings_id)
+    FOREIGN KEY(settings) REFERENCES SETTINGS(settings_id),
+    date_created DATETIME DEFAULT CURRENT_TIMESTAMP
 );
 
 
@@ -45,7 +45,7 @@ CREATE TABLE MODEL (
     favorites INT,
     wins INT,
     losses INT,
-    date_created DATETIME DEFAULT NULL
+    date_created DATETIME DEFAULT CURRENT_TIMESTAMP
 );
 
 /* add relations here */

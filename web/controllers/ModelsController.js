@@ -22,7 +22,7 @@ class ModelsController {
     viewModel(req, res) {
         console.log("View model goes here");
         viewModel(req.params.id).then((result) => {
-            return res.send({message: result});
+            return res.send(result[0]);
         }).catch((e) => {
             return res.status(400).send(e);
         });
