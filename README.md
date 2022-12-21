@@ -55,4 +55,5 @@ test engine::minimax::tictactoe::test_minimax::test_minimax::test_negamax ... ok
 test engine::minimax::tictactoe::test_minimax::test_minimax::test_minimax ... ok
 ```
 
-
+## Want to Contribute
+If anyone is interested in this project. The open issues are fair game and can be tackled by anyone. Those are the items I don't want to spend time working on at the moment and wouldn't mind someone else doing it. For any questions, contact: shalinsingh818@gmail.com
