@@ -1,0 +1,8 @@
+/home/dread/Documents/Code/samples/hydra/target/release/deps/unicode_ident-95ad8be6ff0e4ff7.rmeta: /home/dread/.cargo/registry/src/github.com-1ecc6299db9ec823/unicode-ident-1.0.5/src/lib.rs /home/dread/.cargo/registry/src/github.com-1ecc6299db9ec823/unicode-ident-1.0.5/src/tables.rs
+
+/home/dread/Documents/Code/samples/hydra/target/release/deps/libunicode_ident-95ad8be6ff0e4ff7.rlib: /home/dread/.cargo/registry/src/github.com-1ecc6299db9ec823/unicode-ident-1.0.5/src/lib.rs /home/dread/.cargo/registry/src/github.com-1ecc6299db9ec823/unicode-ident-1.0.5/src/tables.rs
+
+/home/dread/Documents/Code/samples/hydra/target/release/deps/unicode_ident-95ad8be6ff0e4ff7.d: /home/dread/.cargo/registry/src/github.com-1ecc6299db9ec823/unicode-ident-1.0.5/src/lib.rs /home/dread/.cargo/registry/src/github.com-1ecc6299db9ec823/unicode-ident-1.0.5/src/tables.rs
+
+/home/dread/.cargo/registry/src/github.com-1ecc6299db9ec823/unicode-ident-1.0.5/src/lib.rs:
+/home/dread/.cargo/registry/src/github.com-1ecc6299db9ec823/unicode-ident-1.0.5/src/tables.rs:
