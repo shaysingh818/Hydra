@@ -159,6 +159,43 @@ mod instance {
             }
         }
     }
+
+
+    #[test]
+    fn test_dim_ndarray() {
+
+        /* set 2d array */
+        let x: NDArray<f64> = NDArray::array(vec![4, 2], vec![0.0,0.0,0.0,1.0,1.0,1.0,0.0,0.0]).unwrap();
+        let y: NDArray<f64> = NDArray::array(vec![2, 3], vec![1.0,1.0,1.0,2.0,2.0,2.0]).unwrap();
+
+
+        /* get rows of x */ 
+        let y_row_0: Vec<f64> = y.rows(0).unwrap(); 
+        let y_row_1: Vec<f64> = y.rows(1).unwrap();
+        let y_col_0: Vec<f64> = y.cols(0).unwrap(); 
+        let y_col_1: Vec<f64> = y.cols(1).unwrap();
+
+
+        let x_row_0: Vec<f64> = x.rows(0).unwrap(); 
+        let x_row_1: Vec<f64> = x.rows(1).unwrap();
+        let x_col_0: Vec<f64> = x.cols(0).unwrap(); 
+        let x_col_1: Vec<f64> = x.cols(1).unwrap();
+
+        /* validate */ 
+        assert_eq!(y_row_0, vec![1.0,1.0,1.0]);
+        assert_eq!(y_row_1, vec![2.0,2.0,2.0]); 
+        assert_eq!(y_col_0, vec![1.0,2.0]);
+        assert_eq!(y_col_1, vec![1.0,2.0]);
+
+
+        assert_eq!(x_col_0, vec![0.0,0.0,1.0,0.0]);
+        assert_eq!(x_col_1, vec![0.0,1.0,1.0,0.0]);
+        assert_eq!(x_row_0, vec![0.0,0.0]);
+        assert_eq!(x_row_1, vec![0.0,1.0]);
+
+    }
+
+
 }
 
 
@@ -267,6 +304,62 @@ mod ops {
             Ok(_) => println!("Fail due to rank mismatch"),
             Err(err) => {
                 assert_eq!(err, "Subtract: Rank Mismatch"); 
+            }
+        }
+        
+    }
+
+
+    #[test]
+    fn test_dot_ndarray() {
+
+        /* set 2d array */
+        let a: NDArray<f64> = NDArray::array(vec![4, 3], vec![0.0,0.0,1.0,0.0,1.0,2.0,1.0,1.0,3.0,0.0,0.0,4.0]).unwrap();
+        let b: NDArray<f64> = NDArray::array(vec![3, 3], vec![1.0,1.0,1.0,2.0,2.0,2.0,3.0,3.0,3.0]).unwrap();
+
+        let result : NDArray<f64> = a.dot(b).unwrap(); 
+        let expected_vals = vec![3.0,3.0,3.0,8.0,8.0,8.0,12.0,12.0,12.0,12.0,12.0,12.0];
+        let expected_shape = vec![4, 3];
+        
+        assert_eq!(result.values(), &expected_vals);
+        assert_eq!(result.shape(), &expected_shape);
+        assert_eq!(result.values().len(), 12); 
+        assert_eq!(result.rank(), 2);
+        
+        /* set 2d array */
+        let x: NDArray<f64> = NDArray::array(vec![4, 2], vec![0.0,0.0,0.0,1.0,1.0,1.0,0.0,0.0]).unwrap();
+        let y: NDArray<f64> = NDArray::array(vec![2, 3], vec![1.0,1.0,1.0,2.0,2.0,2.0]).unwrap();
+
+        let result : NDArray<f64> = x.dot(y).unwrap(); 
+        let expected_vals = vec![0.0,0.0,0.0,2.0,2.0,2.0,3.0,3.0,3.0, 0.0, 0.0, 0.0];
+        let expected_shape = vec![4, 3];
+        
+
+        assert_eq!(result.values(), &expected_vals);
+        assert_eq!(result.shape(), &expected_shape);
+        assert_eq!(result.values().len(), 12); 
+        assert_eq!(result.rank(), 2);
+
+            
+        /* failure case */
+        let z: NDArray<f64> = NDArray::array(vec![2,2,2], vec![0.0,0.0,1.0,1.0,2.0,2.0,3.0,3.0]).unwrap();
+        let o: NDArray<f64> = NDArray::array(vec![2, 2], vec![0.0,0.0,1.0,1.0]).unwrap();
+        let result: Result<NDArray<f64>, String> = o.dot(z); // catch the error
+        match result {
+            Ok(_) => println!("This should fail"), 
+            Err(err) => {
+                assert_eq!(err, "Dot: Rank Mismatch"); 
+            }
+        }
+
+
+        let m: NDArray<f64> = NDArray::array(vec![2, 4], vec![0.0,0.0,0.0,1.0,1.0,1.0,0.0,0.0]).unwrap();
+        let p: NDArray<f64> = NDArray::array(vec![2, 3], vec![1.0,1.0,1.0,2.0,2.0,2.0]).unwrap();
+        let rank_mismatch: Result<NDArray<f64>, String> = m.dot(p); 
+        match rank_mismatch {
+            Ok(_) => println!("Fail due to rank mismatch"),
+            Err(err) => {
+                assert_eq!(err, "Dot: Rows must equal columns"); 
             }
         }
         

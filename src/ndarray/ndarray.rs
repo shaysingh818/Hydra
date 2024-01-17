@@ -147,4 +147,50 @@ impl<T: Default + Clone> NDArray<T> {
         Ok(())
     }
 
+    pub fn rows(&self, index: usize) -> Result<Vec<T>, String> {
+
+        let dim_shape = self.shape()[0];
+        let result_length = self.size() / dim_shape;
+        let values = self.values();
+        let mut start_index = index * result_length;
+        let mut result = Vec::new();
+
+        for _i in 0..result_length {
+            let value = &values[start_index];
+            result.push(value.clone());
+            start_index += 1; 
+        }
+ 
+        Ok(result)
+
+    }
+
+    pub fn cols(&self, index: usize) -> Result<Vec<T>, String> {
+
+        let mut result = Vec::new();
+        let dim_shape = self.shape()[1];
+        let values = self.values();
+        let result_length = self.size() / dim_shape;
+        let stride = dim_shape;
+        let mut start = index; 
+
+        for _i in 0..result_length {
+            let value = &values[start];
+            result.push(value.clone());
+            start += stride; 
+        }
+ 
+        Ok(result)
+    }
+
+    pub fn dim(&self, dim: usize, index: usize) -> Result<Vec<T>, String> {
+
+        /* get corresponding values */ 
+        let _dim_shape = self.shape()[dim];
+        let _idx = index; 
+
+        let result = Vec::new();
+        Ok(result)
+    }
+
 }

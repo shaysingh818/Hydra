@@ -8,6 +8,7 @@ pub trait Ops {
     fn load(filepath: &str) -> std::io::Result<NDArray<f64>>;
     fn add(&self, other: NDArray<f64>) -> Result <NDArray<f64 >, String>;
     fn subtract(&self, other: NDArray<f64>) -> Result<NDArray<f64>, String>;
+    fn dot(&self, other: NDArray<f64>) -> Result<NDArray<f64>, String>;
     fn scale_add(&self, other: NDArray<f64>) -> Result<NDArray<f64>, String>;
     fn transpose(self) -> Result<NDArray<f64>, String>;
     fn permute(self, indice_order: Vec<usize>) -> Result<NDArray<f64>, String>;  
@@ -87,6 +88,60 @@ impl Ops for NDArray<f64> {
             let add_result = item - values[counter];
             let _ = result.set_idx(counter, add_result);
             counter += 1;
+        }
+
+        Ok(result)
+    }
+
+    fn dot(&self, value: NDArray<f64>) -> Result<NDArray<f64>, String> {
+
+        /* rank mismatch */
+        if self.rank() != value.rank() {
+            return Err("Dot: Rank Mismatch".to_string());
+        }
+
+        if self.rank() != 2 {
+            return Err("Dot: Requires rank 2 values".to_string());
+        }
+
+        if self.shape()[self.rank()-1] != value.shape()[0] {
+            return Err("Dot: Rows must equal columns".to_string());
+        }
+
+        let new_shape: Vec<usize> = vec![self.shape()[0], value.shape()[self.rank()-1]];
+        let mut result = NDArray::new(new_shape).unwrap();
+
+        /* stride values to stay in constant time */ 
+        // let mut counter = 0; 
+        let mut row_counter = 0; 
+        let mut col_counter = 0; 
+        let mut stride = 0;  
+        for counter in 0..result.size() {
+
+            if stride == value.shape()[self.rank()-1]  {
+                row_counter += 1;
+                stride = 0; 
+            }
+
+            if col_counter >= value.shape()[value.rank()-1]-1 {
+                col_counter = 0; 
+            }
+
+            let curr = self.rows(row_counter).unwrap();
+            let val = value.cols(col_counter).unwrap();
+
+            /* multiply */ 
+            let mut value = 0.0; 
+            for item in 0..curr.len() {
+                value += curr[item] * val[item];
+            }
+            result.set_idx(counter, value).unwrap(); 
+
+            
+            // counter += 1; 
+            col_counter += 1;
+            stride += 1;  
+                    
         }
 
         Ok(result)
