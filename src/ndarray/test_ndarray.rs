@@ -6,7 +6,6 @@ mod instance {
 
     #[test]
     fn test_create_ndarray() {
-        println!("TEST ndarray"); 
 
         let x: NDArray<f64> = NDArray::new(vec![3, 4]).unwrap();
         let shape = x.shape();
@@ -162,19 +161,17 @@ mod instance {
 
 
     #[test]
-    fn test_dim_ndarray() {
+    fn test_rows_cols_ndarray() {
 
         /* set 2d array */
         let x: NDArray<f64> = NDArray::array(vec![4, 2], vec![0.0,0.0,0.0,1.0,1.0,1.0,0.0,0.0]).unwrap();
         let y: NDArray<f64> = NDArray::array(vec![2, 3], vec![1.0,1.0,1.0,2.0,2.0,2.0]).unwrap();
-
 
         /* get rows of x */ 
         let y_row_0: Vec<f64> = y.rows(0).unwrap(); 
         let y_row_1: Vec<f64> = y.rows(1).unwrap();
         let y_col_0: Vec<f64> = y.cols(0).unwrap(); 
         let y_col_1: Vec<f64> = y.cols(1).unwrap();
-
 
         let x_row_0: Vec<f64> = x.rows(0).unwrap(); 
         let x_row_1: Vec<f64> = x.rows(1).unwrap();
@@ -187,14 +184,12 @@ mod instance {
         assert_eq!(y_col_0, vec![1.0,2.0]);
         assert_eq!(y_col_1, vec![1.0,2.0]);
 
-
         assert_eq!(x_col_0, vec![0.0,0.0,1.0,0.0]);
         assert_eq!(x_col_1, vec![0.0,1.0,1.0,0.0]);
         assert_eq!(x_row_0, vec![0.0,0.0]);
         assert_eq!(x_row_1, vec![0.0,1.0]);
 
     }
-
 
 }
 
@@ -210,10 +205,10 @@ mod ops {
 
         /* set 2d array */
         let n: NDArray<f64> = NDArray::array(vec![2, 3], vec![0.0,0.0,1.0,1.0,2.0,2.0]).unwrap();
-        let _ = n.save("./testfile");
+        let _ = n.save("data/testfile");
 
         /* load from saved ndarray */ 
-        let loaded: NDArray<f64> = NDArray::load("./testfile").unwrap();
+        let loaded: NDArray<f64> = NDArray::load("data/testfile").unwrap();
         let shape = loaded.shape();
         let rank = loaded.rank();
         let values = loaded.values();
@@ -468,5 +463,4 @@ mod ops {
         }
 
     }
-
 }

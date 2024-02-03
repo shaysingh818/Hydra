@@ -4,7 +4,9 @@
 // pub mod game;
 
 //! I document the current module!
-pub mod ndarray; 
+pub mod ndarray;
+pub mod environment;  
+pub mod games;
 
 // use crate::game::c4;
 // use crate::game::tictactoe;

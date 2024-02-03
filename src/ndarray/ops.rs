@@ -1,6 +1,6 @@
 use crate::ndarray::ndarray::NDArray;
 use std::fs::File;
-use std::io::{BufWriter, Read};
+use std::io::{BufWriter, Read, Write};
 
 
 pub trait Ops {
@@ -25,7 +25,8 @@ impl Ops for NDArray<f64> {
             }
         };
         let mut writer = BufWriter::new(file);
-        let _ = serde_json::to_writer(&mut writer, &self);
+        let json_string = serde_json::to_string_pretty(&self)?;
+        writer.write_all(json_string.as_bytes())?;
         Ok(())
     }
 
@@ -234,5 +235,6 @@ impl Ops for NDArray<f64> {
 
         Ok(result)
     }
+
 
 }

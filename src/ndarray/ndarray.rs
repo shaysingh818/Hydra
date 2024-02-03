@@ -27,6 +27,10 @@ impl<T: Default + Clone> NDArray<T> {
         self.size
     }
 
+    pub fn get(&self, indices: Vec<usize>) -> &T {
+        &self.values[self.index(indices).unwrap()]
+    }
+
     pub fn new(shape: Vec<usize>) -> Result<NDArray<T>, String> {
 
         let calculated_rank = shape.len(); 
@@ -180,16 +184,6 @@ impl<T: Default + Clone> NDArray<T> {
             start += stride; 
         }
  
-        Ok(result)
-    }
-
-    pub fn dim(&self, dim: usize, index: usize) -> Result<Vec<T>, String> {
-
-        /* get corresponding values */ 
-        let _dim_shape = self.shape()[dim];
-        let _idx = index; 
-
-        let result = Vec::new();
         Ok(result)
     }
 
