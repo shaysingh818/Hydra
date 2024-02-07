@@ -234,8 +234,8 @@ mod tictactoe {
     fn test_pop_piece() {
 
         let mut board = TicTacToe::new(vec![3, 3], 2);
-        let mut agent1 = Agent::new(1, "agent-1");
-        let mut agent2 = Agent::new(2, "agent-2");
+        let agent1 = Agent::new(1, "agent-1");
+        let agent2 = Agent::new(2, "agent-2");
 
         board.add_agent(agent1.clone()).unwrap();
         board.add_agent(agent2.clone()).unwrap();
@@ -261,7 +261,7 @@ mod gridworld {
     fn test_create_gridworld() {
 
         let mut board = GridWorld::new(vec![3, 4], 1);
-        let mut agent1 = Agent::new(2, "agent-1");
+        let agent1 = Agent::new(2, "agent-1");
         board.add_agent(agent1.clone()).unwrap();
 
         /* set start and end state */
@@ -297,7 +297,7 @@ mod gridworld {
     fn test_action_space() {
 
         let mut board = GridWorld::new(vec![3, 4], 1);
-        let mut agent1 = Agent::new(2, "agent-1");
+        let agent1 = Agent::new(2, "agent-1");
         board.add_agent(agent1.clone()).unwrap();
 
         /* set start and end state */
@@ -375,13 +375,188 @@ mod connect4 {
 
         board.add_agent(agent1.clone()).unwrap();
         board.add_agent(agent2.clone()).unwrap();
-
-        
+ 
         board.drop_piece(agent1.id(), 0); 
-        board.state_view();
+        board.drop_piece(agent1.id(), 0);
+        board.drop_piece(agent2.id(), 2); 
 
+        let expected_state: Vec<i32> = vec![
+            0, 0, 0, 0, 0, 0, 0,
+            0, 0, 0, 0, 0, 0, 0,
+            0, 0, 0, 0, 0, 0, 0,
+            0, 0, 0, 0, 0, 0, 0,
+            1, 0, 0, 0, 0, 0, 0,
+            1, 0, 2, 0, 0, 0, 0,
+        ]; 
+
+        assert_eq!(board.state().grid().values(), &expected_state);
+        
+        board.clear();
+        board.drop_piece(agent1.id(), 0); 
+        board.drop_piece(agent1.id(), 0);
+        board.drop_piece(agent1.id(), 0); 
+        board.drop_piece(agent2.id(), 0);
+        
+        let expected_state: Vec<i32> = vec![
+            0, 0, 0, 0, 0, 0, 0,
+            0, 0, 0, 0, 0, 0, 0,
+            2, 0, 0, 0, 0, 0, 0,
+            1, 0, 0, 0, 0, 0, 0,
+            1, 0, 0, 0, 0, 0, 0,
+            1, 0, 0, 0, 0, 0, 0,
+        ];
+        
+        assert_eq!(board.state().grid().values(), &expected_state);
 
     }
 
 
+    #[test]
+    fn test_horizontals() {
+
+        let mut board = Connect4::new(vec![6, 7], 2);
+        let agent1 = Agent::new(1, "agent-1");
+        let agent2 = Agent::new(2, "agent-2");
+
+        board.add_agent(agent1.clone()).unwrap();
+        board.add_agent(agent2.clone()).unwrap();
+ 
+        board.drop_piece(agent1.id(), 0); 
+        board.drop_piece(agent1.id(), 1);
+        board.drop_piece(agent1.id(), 2); 
+        board.drop_piece(agent1.id(), 3);
+        
+        let result = board.horizontals(agent1.id()); 
+        assert_eq!(result, true);
+        
+        board.clear(); 
+        board.drop_piece(agent1.id(), 0); 
+        board.drop_piece(agent1.id(), 2);
+        board.drop_piece(agent1.id(), 3); 
+        board.drop_piece(agent1.id(), 4);
+
+        let result = board.horizontals(agent1.id()); 
+        assert_eq!(result, false);
+        board.drop_piece(agent1.id(), 5);
+
+        let result = board.horizontals(agent1.id()); 
+        assert_eq!(result, true);
+
+        board.drop_piece(agent2.id(), 2);
+        board.drop_piece(agent2.id(), 3); 
+        board.drop_piece(agent2.id(), 4);
+        board.drop_piece(agent2.id(), 5); 
+
+        let result = board.horizontals(agent2.id()); 
+        assert_eq!(result, true);
+
+    }
+
+
+    #[test]
+    fn test_verticals() {
+
+        let mut board = Connect4::new(vec![6, 7], 2);
+        let agent1 = Agent::new(1, "agent-1");
+        let agent2 = Agent::new(2, "agent-2");
+
+        board.add_agent(agent1.clone()).unwrap();
+        board.add_agent(agent2.clone()).unwrap();
+
+        board.drop_piece(agent1.id(), 0); 
+        board.drop_piece(agent1.id(), 0);
+        board.drop_piece(agent1.id(), 0); 
+        board.drop_piece(agent1.id(), 0);
+
+        let result = board.verticals(agent1.id());  
+        assert_eq!(result, true);
+        
+        board.clear();
+        board.drop_piece(agent2.id(), 0); 
+        board.drop_piece(agent1.id(), 0);
+        board.drop_piece(agent1.id(), 0); 
+        board.drop_piece(agent1.id(), 0);
+        board.drop_piece(agent1.id(), 0);
+
+        let result = board.verticals(agent1.id());  
+        assert_eq!(result, true);
+
+        board.clear();
+        board.drop_piece(agent1.id(), 2); 
+        board.drop_piece(agent2.id(), 2);
+        board.drop_piece(agent2.id(), 2); 
+        board.drop_piece(agent2.id(), 2);
+        board.drop_piece(agent2.id(), 2);
+
+        let result = board.verticals(agent2.id());  
+        assert_eq!(result, true);
+
+        let result = board.verticals(agent1.id()); 
+        assert_eq!(result, false);
+         
+        board.clear();
+        board.drop_piece(agent1.id(), 6); 
+        board.drop_piece(agent2.id(), 6);
+        board.drop_piece(agent2.id(), 6); 
+        board.drop_piece(agent2.id(), 6);
+        board.drop_piece(agent2.id(), 6);
+
+        let result = board.verticals(agent2.id());  
+        assert_eq!(result, true);
+
+        let result = board.verticals(agent1.id()); 
+        assert_eq!(result, false);
+
+    }
+
+
+    #[test]
+    fn test_diagonals() {
+
+        let mut board = Connect4::new(vec![6, 7], 2);
+        let agent1 = Agent::new(1, "agent-1");
+        let agent2 = Agent::new(2, "agent-2");
+
+        board.add_agent(agent1.clone()).unwrap();
+        board.add_agent(agent2.clone()).unwrap();
+
+        board.drop_piece(agent1.id(), 0); 
+        board.drop_piece(agent1.id(), 0);
+        board.drop_piece(agent1.id(), 0); 
+        board.drop_piece(agent2.id(), 0);
+
+        board.drop_piece(agent1.id(), 1);
+        board.drop_piece(agent1.id(), 1);
+        board.drop_piece(agent2.id(), 1);
+
+        board.drop_piece(agent1.id(), 2);
+        board.drop_piece(agent2.id(), 2);
+
+        board.drop_piece(agent2.id(), 3);
+
+        let result = board.diagonals(agent2.id()); 
+        assert_eq!(result, true); 
+        
+        let result = board.diagonals(agent1.id()); 
+        assert_eq!(result, false); 
+
+        board.clear();
+        board.drop_piece(agent1.id(), 6); 
+        board.drop_piece(agent1.id(), 6);
+        board.drop_piece(agent1.id(), 6); 
+        board.drop_piece(agent2.id(), 6);
+
+        board.drop_piece(agent1.id(), 5);
+        board.drop_piece(agent1.id(), 5);
+        board.drop_piece(agent2.id(), 5);
+
+        board.drop_piece(agent1.id(), 4);
+        board.drop_piece(agent2.id(), 4);
+
+        board.drop_piece(agent2.id(), 3);
+
+        /* this is the part we'll finish up later */ 
+
+
+    }
 }

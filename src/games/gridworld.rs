@@ -1,4 +1,3 @@
-use rand::*;
 use serde::{Serialize, Deserialize};
 use crate::environment::agent::Agent;
 use crate::environment::state::State;
@@ -69,7 +68,6 @@ impl GridWorld {
             return Err("View only works for 2d environments".to_string());
         }
 
-        let values = self.state.grid().values();
         let rows = self.shape[0]; 
         let cols = self.shape[1]; 
         for row in 0..rows {
