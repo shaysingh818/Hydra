@@ -100,7 +100,7 @@ impl State {
 
     /// Cycle to the next agent in the agent list 
     pub fn next_agent(&mut self) {
-        if self.turn() >= 0 {
+        if self.turn() as i32 >= 0 {
             let value = self.turn() + 1; 
             self.set_turn(value); 
         } else if self.turn() == self.agents().len() - 1 {
