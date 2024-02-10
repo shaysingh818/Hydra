@@ -3,6 +3,30 @@ use crate::environment::agent::Agent;
 use crate::environment::state::State;
 
 
+/// The state structure is used for simulating environments that agents can be added to
+/// # Example Usage
+/// ```rust
+/// use crate::hydra::environment::agent::Agent;
+/// use crate::hydra::games::tictactoe::TicTacToe;
+///
+/// // example tic tac toe usage
+/// let mut board = TicTacToe::new(vec![3, 3], 2);
+/// let agent1 = Agent::new(1, "agent-1");
+/// let agent2 = Agent::new(2, "agent-2");
+///
+/// // Add agents to the board
+/// board.add_agent(agent1.clone()).unwrap();
+/// board.add_agent(agent2.clone()).unwrap();
+///
+/// // Place peices on the board
+/// board.place_piece(agent1.id(), vec![0, 0]); 
+/// board.place_piece(agent1.id(), vec![1, 1]);
+/// board.place_piece(agent1.id(), vec![2, 2]);
+///
+/// // Confirm that diagonals rule has been met
+/// let result = board.diagonals(agent1.clone());
+/// assert_eq!(result, true);
+/// ``` 
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
 pub struct TicTacToe {
     shape: Vec<usize>,
@@ -15,6 +39,7 @@ pub struct TicTacToe {
 
 impl TicTacToe {
 
+    /// Create new instance of TicTacToe board
     pub fn new(shape: Vec<usize>, max_players: i32) -> TicTacToe {
         Self {
             shape: shape.clone(),
@@ -25,45 +50,56 @@ impl TicTacToe {
         }
     }
 
+
+    /// Retreive the max amount of players for the board environment
     pub fn max_players(&self) -> i32 {
         self.max_players
     }
 
+    /// Get the current action that's been placed on the board
     pub fn curr_action(&self) -> &Vec<usize> {
         &self.current_action
     }
 
+    /// Retrieve the current turn of the agent list
     pub fn curr_turn(&self) -> usize {
         self.state.turn()
     }
 
+    /// Retrieve list of agents on the board
     pub fn players(&self) -> &Vec<Agent> {
         self.state.agents()
     }
 
+    /// Retrieve inherited state structure for board environment
     pub fn state(&self) -> &State {
         &self.state
     }
 
+    /// Print current state structure
     pub fn print(&self) {
         println!("{:?}", self.state.print()); 
     }
 
+    /// Place piece on tic tac toe board environment
     pub fn place_piece(&mut self, value: i32, coords: Vec<usize>) {
         self.state.place(value, coords.clone());
         self.current_action = coords; 
     }
 
+    /// Remove last piece placed on the board
     pub fn pop_piece(&mut self) {
         self.state.prev_agent(); 
         self.state.place(0, self.current_action.clone()); 
     }
 
+    /// Clear board state
     pub fn clear(&mut self) {
         self.state.clear();
         self.current_action = vec![0, 0]
     }
 
+    /// Add agent to current board state
     pub fn add_agent(&mut self, agent: Agent) -> Result<(), String> {
         if self.curr_agent_count == self.max_players {
             return Err("Max players reached for tictactoe".to_string())
@@ -73,7 +109,7 @@ impl TicTacToe {
         Ok(()) 
     }
 
-
+    /// Check if agent has any diagonals from each direction
     pub fn diagonals(&self, agent: Agent) -> bool {
 
         let row_idx = self.shape[0]-1;
@@ -122,6 +158,7 @@ impl TicTacToe {
     }
 
 
+    /// Check if agent has any verticals or horiztontals in a row across the board
     pub fn vert_horiz(&self, agent: Agent) -> bool {
 
         let mut vert = true; 
@@ -179,7 +216,7 @@ impl TicTacToe {
         horiz
     }
 
-
+    /// Determine if agent has won using tictactoe rules
     pub fn winner(&self, agent: Agent) -> bool {
 
         let diagonals = self.diagonals(agent.clone());
@@ -191,7 +228,7 @@ impl TicTacToe {
         false
     }
 
-
+    /// Determine the reward of the agent and factor in opponents environment state
     pub fn static_evaluation(&self, agent: Agent, opp: Agent) -> Result<i32, String> {
         
         let mut score = 0;

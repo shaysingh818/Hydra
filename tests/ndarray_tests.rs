@@ -1,8 +1,9 @@
+use hydra::structures;
 
 #[cfg(test)]
-mod instance {
+mod ndarray {
 
-    use crate::ndarray::ndarray::NDArray;
+    use crate::structures::ndarray::NDArray;
 
     #[test]
     fn test_create_ndarray() {
@@ -197,8 +198,8 @@ mod instance {
 #[cfg(test)]
 mod ops {
 
-    use crate::ndarray::ndarray::NDArray;
-    use crate::ndarray::ops::*;
+    use crate::structures::ndarray::NDArray;
+    use crate::structures::ops::*;
 
     #[test]
     fn test_save_load_ndarray() {

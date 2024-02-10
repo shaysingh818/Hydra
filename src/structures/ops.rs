@@ -1,12 +1,12 @@
-use crate::ndarray::ndarray::NDArray;
+use crate::structures::ndarray::NDArray;
 use std::fs::File;
 use std::io::{BufWriter, Read, Write};
 
-
+/// Generic operations performed for NDArray with f64 type
 pub trait Ops {
-    fn save(&self, filepath: &str) -> std::io::Result<()>;
+    fn save(&self, filepath: &str) -> std::io::Result<()>; 
     fn load(filepath: &str) -> std::io::Result<NDArray<f64>>;
-    fn add(&self, other: NDArray<f64>) -> Result <NDArray<f64 >, String>;
+    fn add(&self, other: NDArray<f64>) -> Result <NDArray<f64 >, String>; 
     fn subtract(&self, other: NDArray<f64>) -> Result<NDArray<f64>, String>;
     fn dot(&self, other: NDArray<f64>) -> Result<NDArray<f64>, String>;
     fn scale_add(&self, other: NDArray<f64>) -> Result<NDArray<f64>, String>;
@@ -16,6 +16,7 @@ pub trait Ops {
 
 impl Ops for NDArray<f64> {
 
+    /// Save instance of NDArray to json file with serialized values
     fn save(&self, filepath: &str) -> std::io::Result<()> {
         let filename_format = format!("{filepath}.json");
         let file = match File::create(filename_format) {
@@ -31,6 +32,7 @@ impl Ops for NDArray<f64> {
     }
 
 
+    /// Load Instance of saved NDarray, serialize to NDArray structure
     fn load(filepath: &str) -> std::io::Result<NDArray<f64>> {
         let filename_format = format!("{filepath}.json");
         let mut file = match File::open(filename_format) {
@@ -45,7 +47,7 @@ impl Ops for NDArray<f64> {
         Ok(instance)
     }
 
-    /* ops */ 
+    /// Add two NDArray's and get resulting NDArray instance
     fn add(&self, value: NDArray<f64>) -> Result<NDArray<f64>, String> {
 
         /* rank mismatch */
@@ -70,6 +72,7 @@ impl Ops for NDArray<f64> {
         Ok(result)
     }
 
+    /// Subtract values in NDArray instances
     fn subtract(&self, value: NDArray<f64>) -> Result<NDArray<f64>, String> {
 
         /* rank mismatch */
@@ -94,6 +97,7 @@ impl Ops for NDArray<f64> {
         Ok(result)
     }
 
+    /// Perform dot product of current NDArray on another NDArray instance
     fn dot(&self, value: NDArray<f64>) -> Result<NDArray<f64>, String> {
 
         /* rank mismatch */
@@ -148,6 +152,7 @@ impl Ops for NDArray<f64> {
         Ok(result)
     }
 
+    /// Add values by scalar for current NDArray instance
     fn scale_add(&self, value: NDArray<f64>) -> Result<NDArray<f64>, String> {
 
         let value_shape = value.shape();
@@ -173,6 +178,7 @@ impl Ops for NDArray<f64> {
 
     }
 
+    /// Tranpose current NDArray instance, works only on rank 2 values
     fn transpose(self) -> Result<NDArray<f64>, String> {
 
         if self.rank() != 2 {
@@ -203,6 +209,7 @@ impl Ops for NDArray<f64> {
 
     }
 
+    /// Permute indices of NDArray. Can be used to peform transposes/contraction on rank 3 or higher values.
     fn permute(self, indice_order: Vec<usize>) -> Result<NDArray<f64>, String> {
 
         if indice_order.len() != self.rank() {

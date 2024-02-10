@@ -3,6 +3,22 @@ use crate::environment::agent::Agent;
 use crate::environment::state::State;
 
 
+/// The state structure is used for simulating environments that agents can be added to
+/// # Example Usage
+/// ```rust
+/// use crate::hydra::environment::agent::Agent;
+/// use crate::hydra::games::gridworld::GridWorld;
+///
+/// // example grid world usage
+/// let mut board = GridWorld::new(vec![3, 4], 1);
+/// let agent1 = Agent::new(2, "agent-1");
+/// board.add_agent(agent1.clone()).unwrap();
+///
+/// /* set start and end state */
+/// board.set_start_pos(vec![2, 0], agent1.id());
+/// board.set_end_pos(vec![0, 3], 1); 
+/// board.set_end_pos(vec![1, 3], -1);
+/// ``` 
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
 pub struct GridWorld {
     shape: Vec<usize>,
@@ -17,6 +33,7 @@ pub struct GridWorld {
 
 impl GridWorld {
 
+    /// Create instance of GridWorld environment
     pub fn new(shape: Vec<usize>, max_players: i32) -> GridWorld {
         GridWorld {
             shape: shape.clone(),
@@ -29,39 +46,47 @@ impl GridWorld {
         }
     }
 
+    /// Retrieve starting position of agent
     pub fn start_pos(&self) -> &Vec<usize> {
         &self.start_pos 
     }
 
+    /// Retrieve end positions for agent
     pub fn end_positions(&self) -> &Vec<Vec<usize>> {
         &self.end_positions
     }
 
+    /// Retrieve agents for GridWorld environment
     pub fn agents(&self) -> &Vec<Agent> {
         self.state.agents()
     }
 
+    /// Retrieve inherited state structure for GridWorld environment
     pub fn state(&self) -> &State {
         &self.state
     }
 
+    /// Set start position for agent and assign reward value
     pub fn set_start_pos(&mut self, start_pos: Vec<usize>, value: i32) {
         self.curr_pos = start_pos.clone();
         self.start_pos = start_pos.clone();
         self.state.place(value, start_pos); 
     }
 
+    /// Set ending position for agents and assign reward value
     pub fn set_end_pos(&mut self, end_pos: Vec<usize>, reward: i32) {
         self.end_positions.push(end_pos.clone());
         self.state.place(reward, end_pos);
     }
 
+    /// Take action in environment, move (up, down, left or right)
     pub fn take_action(&mut self, coords: Vec<usize>, value: i32) {
         self.state.place(0, self.curr_pos.clone()); 
         self.curr_pos = coords.clone();
         self.state.place(value, coords);    
     }
 
+    /// View 2 Dimensional view of state space for GridWorld
     pub fn state_view(&self)  -> Result<(), String> {
 
         if self.state.grid().rank() != 2 {
@@ -81,6 +106,7 @@ impl GridWorld {
         Ok(())
     }
 
+    /// Add agent to GridWorld state space
     pub fn add_agent(&mut self, agent: Agent) -> Result<(), String> {
         
         if self.agent_count >= self.max_players {
@@ -92,6 +118,7 @@ impl GridWorld {
         Ok(()) 
     }
 
+    /// Get available actions on the state space for GridWorld
     pub fn avaliable_moves(&self) -> Result<Vec<Vec<usize>>, String> {
 
         if self.state.grid().rank() != 2 {

@@ -1,4 +1,4 @@
-pub mod ndarray;
+pub mod structures;
 pub mod environment;  
 pub mod games;
 

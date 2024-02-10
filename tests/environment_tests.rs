@@ -1,6 +1,8 @@
+use hydra::environment; 
+
 
 #[cfg(test)]
-mod state_instance {
+mod state {
 
     use crate::environment::agent::Agent;
     use crate::environment::state::State;
@@ -219,7 +221,7 @@ mod state_instance {
 
 
 #[cfg(test)]
-mod state_agent {
+mod agent {
 
     use crate::environment::agent::Agent;
 

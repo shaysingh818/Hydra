@@ -1,5 +1,26 @@
 use serde::{Serialize, Deserialize};
 
+
+/// Multidimensional array that can use generic values
+/// # Example Usage
+/// ```rust
+/// use crate::hydra::structures::ndarray::NDArray;
+///
+/// // create new ND array without values
+/// let mut x: NDArray<f64> = NDArray::new(vec![3, 4]).unwrap();
+/// let shape = x.shape();
+/// let rank = x.rank();
+///
+/// x.set(vec![0,0], 2.0); // set value
+///
+/// // NDArray with values
+
+/// let n: NDArray<f64> = NDArray::array(vec![2, 2], vec![0.0,0.0,1.0,1.0]).unwrap();
+/// let shape = n.shape();
+/// let rank = n.rank();
+/// let values = n.values();
+///
+/// ``` 
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
 pub struct NDArray<T> {
     shape: Vec<usize>,
@@ -11,26 +32,32 @@ pub struct NDArray<T> {
 
 impl<T: Default + Clone> NDArray<T> {
 
+    /// Gets the rank of the current array
     pub fn rank(&self) -> usize {
         self.rank
     }
 
+    /// Returns the shape dimensions of the array
     pub fn shape(&self) -> &Vec<usize> {
         &self.shape
     }
 
+    /// Get the generic values stored in the array
     pub fn values(&self) -> &Vec<T> {
         &self.values
     }
     
+    /// Get the current calculated size of the contigous array
     pub fn size(&self) -> usize {
         self.size
     }
 
+    /// Get generic value from provided indices
     pub fn get(&self, indices: Vec<usize>) -> &T {
         &self.values[self.index(indices).unwrap()]
     }
 
+    /// Create instance of NDArray, provide shape dimensions as parameter
     pub fn new(shape: Vec<usize>) -> Result<NDArray<T>, String> {
 
         let calculated_rank = shape.len(); 
@@ -47,6 +74,8 @@ impl<T: Default + Clone> NDArray<T> {
         })
     }
 
+    
+    /// Create instance of NDArray, provide shape dimensions and array values as parameter
     pub fn array(shape: Vec<usize>, values: Vec<T>) -> Result<NDArray<T>, String> {
 
         let calculated_rank = shape.len(); 
@@ -67,6 +96,7 @@ impl<T: Default + Clone> NDArray<T> {
         })
     }
 
+    /// Reshape dimensions of array to new shape. Shape must match current size
     pub fn reshape(&mut self, shape_vals: Vec<usize>) -> Result<(), String> {
 
         if shape_vals.len() != self.rank {
@@ -86,6 +116,7 @@ impl<T: Default + Clone> NDArray<T> {
         Ok(())
     }
 
+    /// Get contigous index of array using provided indices as parameter
     pub fn index(&self, indices: Vec<usize>) -> Result<usize, String> {
 
         if indices.len() != self.rank {
@@ -110,6 +141,7 @@ impl<T: Default + Clone> NDArray<T> {
         Ok(index)
     }
 
+    /// Get indices from provided contigous index as parameter
     pub fn indices(&self, index: usize) -> Result<Vec<usize>, String> {
 
         if index > self.size-1 {
@@ -130,6 +162,7 @@ impl<T: Default + Clone> NDArray<T> {
         Ok(indexs)       
     }
 
+    /// Set index and generic value, index must be within size of array
     pub fn set_idx(&mut self, idx: usize, value: T) -> Result<(), String> {
 
         if idx > self.size {
@@ -140,6 +173,7 @@ impl<T: Default + Clone> NDArray<T> {
         Ok(())
     }
 
+    /// Set generic value using provided indices. Indices must match rank of array
     pub fn set(&mut self, indices: Vec<usize>, value: T) -> Result<(), String> {
 
         if indices.len() != self.rank {
@@ -151,6 +185,7 @@ impl<T: Default + Clone> NDArray<T> {
         Ok(())
     }
 
+    /// Get rows dimension associated with multi dimensional array
     pub fn rows(&self, index: usize) -> Result<Vec<T>, String> {
 
         let dim_shape = self.shape()[0];
@@ -169,6 +204,7 @@ impl<T: Default + Clone> NDArray<T> {
 
     }
 
+    /// Get column dimension associated with multi dimensional array
     pub fn cols(&self, index: usize) -> Result<Vec<T>, String> {
 
         let mut result = Vec::new();
