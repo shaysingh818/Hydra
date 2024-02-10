@@ -21,6 +21,7 @@ jobs:
       run: cargo test --color always
 
   documentation:
+    needs: [unit-test]
     runs-on: ubuntu-20.04
     steps:
     - uses: actions/checkout@v2
