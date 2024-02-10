@@ -132,7 +132,7 @@ impl Connect4 {
             row_counter = 0; 
         }
 
-        
+       /* start v.0.2.0 here */ 
         false
     }
 
