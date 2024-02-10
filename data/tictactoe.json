@@ -1,0 +1,41 @@
+{
+  "name": "testing-state-save-load",
+  "grid": {
+    "shape": [
+      3,
+      3
+    ],
+    "size": 9,
+    "rank": 2,
+    "values": [
+      1,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      2
+    ]
+  },
+  "agents": [
+    {
+      "id": 1,
+      "label": "agent-1",
+      "score": 0.0,
+      "active": false
+    },
+    {
+      "id": 2,
+      "label": "agent-2",
+      "score": 0.0,
+      "active": false
+    }
+  ],
+  "turn": 0,
+  "current_action": [
+    2,
+    2
+  ]
+}

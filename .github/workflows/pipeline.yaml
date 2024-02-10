@@ -8,27 +8,27 @@ on:
 
 jobs:
 
+
   unit-test:
     runs-on: ubuntu-20.04
     steps:
     - uses: actions/checkout@v2
-    - name: Build and Test
-      run: cargo test
+
+    - name: Build
+      run: cargo build --color always
+
+    - name: Unit Test
+      run: cargo test --color always
 
   documentation:
-    runs-on: ubuntu-latest
+    needs: [unit-test]
+    runs-on: ubuntu-20.04
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-python@v4
-        with:
-          python-version: 3.x
-      - run: echo "cache_id=$(date --utc '+%V')" >> $GITHUB_ENV 
+    - uses: actions/checkout@v2
 
-      - uses: actions/cache@v3
-        with:
-          key: mkdocs-material-${{ env.cache_id }}
-          path: .cache
-          restore-keys: |
-            mkdocs-material-
-      - run: pip install mkdocs-material 
-      - run: mkdocs gh-deploy --force 
+    - name: Publish Docs
+      run: | 
+        cargo doc --no-deps
+        rm -rf ./docs
+        echo "<meta http-equiv=\"refresh\" content=\"0; url=build_wheel\">" > target/doc/index.html
+        cp -r target/doc ./docs
